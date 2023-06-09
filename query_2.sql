@@ -5,39 +5,44 @@ Aggregation of the export/import of revenue of lineitems between two nations (E,
 supplier and I the nations of the lineitem customer. The revenue is obtained by l_extendedprice * (1 - l_discount) of the considered lineitems
 */
 
--- Roll-up: month - type - nation
-
-WITH revenue_suppliers_nations AS (
-	SELECT
-		EXTRACT (MONTH FROM o.o_orderdate) AS _month,
-		pa.p_type AS _type,
-		s.s_nationkey AS nationkey,
-		SUM(l.l_extendedprice * (1 - l.l_discount)) AS revenue_suppliers
-	FROM tpch1.orders AS o
-		JOIN tpch1.lineitem AS l ON o.o_orderkey = l.l_orderkey
-		JOIN tpch1.supplier AS s ON l.l_suppkey = s.s_suppkey
-		JOIN tpch1.nation AS n ON s.s_nationkey = n.n_nationkey
-		JOIN tpch1.part AS pa ON l.l_partkey = pa.p_partkey
-	GROUP BY (_month, _type, nationkey)
-), revenue_customers_nations AS (
-	SELECT
-		EXTRACT (MONTH FROM o.o_orderdate) AS _month,
-		pa.p_type AS _type,
-		cu.c_nationkey AS nationkey,
-		SUM(l.l_extendedprice * (1 - l.l_discount)) AS revenue_customer
-	FROM tpch1.orders AS o 
-		JOIN tpch1.lineitem AS l ON o.o_orderkey = l.l_orderkey
-		JOIN tpch1.customer AS cu ON o.o_custkey = cu.c_custkey
-		JOIN tpch1.nation AS n ON cu.c_nationkey = n.n_nationkey
-		JOIN tpch1.part AS pa ON l.l_partkey = pa.p_partkey
-	GROUP BY (_month, _type, nationkey)
-)
+CREATE OR REPLACE VIEW tpch1.supplier_regions AS
+	SELECT s_suppkey AS sr_suppkey, s_nationkey AS sr_nationkey, n_name AS sr_name, n_regionkey AS sr_regionkey
+	FROM tpch1.supplier JOIN tpch1.nation ON s_nationkey = n_nationkey;
 	
-SELECT 
-	rsn.nationkey AS E,
-	rcn.nationkey AS I,
-	rsn._month AS _month,
-	rsn._type AS _type,
-	(rsn.revenue_suppliers/rcn.revenue_customer) AS E_I
-FROM revenue_suppliers_nations AS rsn JOIN revenue_customers_nations AS rcn 
-	ON rsn._month = rcn._month AND rsn._type = rcn._type AND rsn.nationkey <> rcn.nationkey; -- Assuming E != I
+CREATE OR REPLACE VIEW tpch1.customer_regions AS
+	SELECT c_custkey AS cr_custkey, c_nationkey AS cr_nationkey, n_name AS cr_name, n_regionkey AS cr_regionkey
+	FROM tpch1.customer JOIN tpch1.nation ON c_nationkey = n_nationkey;
+
+SELECT
+	EXTRACT (YEAR FROM o_orderdate) AS _year,
+	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
+	EXTRACT (MONTH FROM o_orderdate) AS _month,
+	cr_custkey,
+	cr_nationkey,
+	cr_name,
+	cr_regionkey,
+	sr_suppkey,
+	sr_nationkey,
+	sr_name,
+	sr_regionkey,
+	p_type,
+	SUM(l_extendedprice * (1 - l_discount))
+FROM
+	tpch1.lineitem JOIN tpch1.orders ON l_orderkey = o_orderkey
+	JOIN tpch1.customer_regions ON o_custkey = cr_custkey
+	JOIN tpch1.supplier_regions ON l_suppkey = sr_suppkey
+	JOIN tpch1.part ON l_partkey = p_partkey
+WHERE sr_nationkey <> cr_nationkey
+GROUP BY
+	_year,
+	_quarter,
+	_month,
+	cr_custkey,
+	cr_nationkey,
+	cr_name,
+	cr_regionkey,
+	sr_suppkey,
+	sr_nationkey,
+	sr_name,
+	sr_regionkey,
+	p_type;
