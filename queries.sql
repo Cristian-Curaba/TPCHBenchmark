@@ -2,6 +2,7 @@
 -- SELECT pg_size_pretty( pg_total_relation_size('tpch1.customer_location') );
 -- SELECT pg_size_pretty( pg_total_relation_size('tpch1.supplier_location') );
 
+--
 CREATE MATERIALIZED VIEW tpch1.lineitem_orders AS
 	SELECT 
 		o_orderkey, 
@@ -43,6 +44,7 @@ CREATE MATERIALIZED VIEW tpch1.supplier_location AS
 		JOIN tpch1.region ON (n_regionkey = r_regionkey);
 		
 --Query1:
+EXPLAIN ANALYSE VERBOSE WITH query1 AS (
 SELECT
 	EXTRACT (YEAR FROM o_orderdate) AS _year,
 	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
@@ -76,9 +78,12 @@ GROUP BY
 	s_nationname,
 	s_suppkey,
 	s_name,
-	p_type;
+	p_type
+) 
+SELECT * FROM query1;
 	
 --Query 2:
+EXPLAIN ANALYSE VERBOSE WITH query2 AS (
 SELECT 
 	EXTRACT(YEAR FROM o_orderdate) AS _year,
 	EXTRACT(MONTH FROM o_orderdate) AS _month,
@@ -98,9 +103,12 @@ GROUP BY
 	c_regionkey,
 	c_regionname,
 	c_nationkey,
-	c_nationname;
+	c_nationname
+)
+SELECT * FROM query2;
 	
 --Query 3:
+EXPLAIN ANALYSE VERBOSE WITH query3 AS (
 SELECT
 	EXTRACT (YEAR FROM o_orderdate) AS _year,
 	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
@@ -119,4 +127,12 @@ GROUP BY
 	_quarter,
 	_month,
 	c_custkey,
-	c_name;
+	c_name
+)
+SELECT * FROM query3;
+	
+
+	
+
+
+	
