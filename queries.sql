@@ -64,11 +64,17 @@ GROUP BY
 	_year,
 	_quarter,
 	_month,
+	c_regionkey,
 	c_regionname,
+	c_nationkey,
 	c_nationname,
+	c_custkey,
 	c_name,
+	s_regionkey,
 	s_regionname,
+	s_nationkey,
 	s_nationname,
+	s_suppkey,
 	s_name,
 	p_type;
 	
@@ -89,7 +95,9 @@ WHERE
 GROUP BY
 	_year,
 	_month,
+	c_regionkey,
 	c_regionname,
+	c_nationkey,
 	c_nationname;
 	
 --Query 3:
@@ -112,9 +120,3 @@ GROUP BY
 	_month,
 	c_custkey,
 	c_name;
-	
-
-	
-
-
-	
