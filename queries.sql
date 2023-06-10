@@ -83,7 +83,7 @@ GROUP BY
 SELECT * FROM query1;
 	
 --Query 2:
-EXPLAIN ANALYSE VERBOSE WITH query2 AS (
+EXPLAIN ANALYSE WITH query2 AS (
 SELECT 
 	EXTRACT(YEAR FROM o_orderdate) AS _year,
 	EXTRACT(MONTH FROM o_orderdate) AS _month,
@@ -106,7 +106,7 @@ GROUP BY
 	c_nationname
 )
 SELECT * FROM query2;
-	
+
 --Query 3:
 EXPLAIN ANALYSE VERBOSE WITH query3 AS (
 SELECT
@@ -130,9 +130,3 @@ GROUP BY
 	c_name
 )
 SELECT * FROM query3;
-	
-
-	
-
-
-	
