@@ -114,7 +114,7 @@ SELECT
 	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
 	EXTRACT (MONTH FROM o_orderdate) AS _month,
 	c_name,
-	SUM(l_extendedprice - (1 * l_discount)) AS returnloss
+	SUM(l_extendedprice * (1 - l_discount)) AS returnloss
 FROM
 	tpch1.lineitem_orders
 	JOIN tpch1.customer ON o_custkey = c_custkey
