@@ -132,3 +132,10 @@ GROUP BY
 	c_name
 )
 SELECT * FROM query3;
+
+-- Indexes
+
+CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
+    ON tpch10.lineitem USING btree
+    (l_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
