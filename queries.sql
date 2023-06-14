@@ -2,7 +2,7 @@
 -- SELECT pg_size_pretty( pg_total_relation_size('tpch1.customer_location') );
 -- SELECT pg_size_pretty( pg_total_relation_size('tpch1.supplier_location') );
 
-SET search_path TO tpch1;
+SET search_path TO tpch10;
 
 --
 CREATE MATERIALIZED VIEW lineitem_orders AS
@@ -109,7 +109,47 @@ GROUP BY
 )
 SELECT * FROM query2;
 
---Query 3:
+--QUERY 3:
+
+-- Vanilla version:
+EXPLAIN ANALYSE VERBOSE WITH lineitem_orders AS (
+	SELECT 
+		o_orderkey, 
+		l_partkey, 
+		l_suppkey, 
+		o_orderdate, 
+		o_custkey, 
+		l_extendedprice, 
+		l_discount, 
+		l_returnflag,
+		l_commitdate,
+		l_receiptdate
+	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey)
+),
+query3 AS (
+SELECT
+	EXTRACT (YEAR FROM o_orderdate) AS _year,
+	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
+	EXTRACT (MONTH FROM o_orderdate) AS _month,
+	c_name,
+	SUM(l_extendedprice * (1 - l_discount)) AS returnloss
+FROM
+	lineitem_orders
+	JOIN customer ON o_custkey = c_custkey
+WHERE 
+	l_returnflag = 'R'
+	-- AND c_name = 'Customer#000129976'
+	-- AND EXTRACT (QUARTER FROM o_orderdate) = 1
+GROUP BY
+	_year,
+	_quarter,
+	_month,
+	c_custkey,
+	c_name
+)
+SELECT * FROM query3;
+
+-- With Materialized views version:
 EXPLAIN ANALYSE VERBOSE WITH query3 AS (
 SELECT
 	EXTRACT (YEAR FROM o_orderdate) AS _year,
@@ -136,6 +176,6 @@ SELECT * FROM query3;
 -- Indexes
 
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
-    ON tpch10.lineitem USING btree
+    ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
     TABLESPACE pg_default;
