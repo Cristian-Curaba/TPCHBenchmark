@@ -1,0 +1,78 @@
+%!TEX encoding = UTF-8 Unicode
+\documentclass[letterpaper,11pt,english]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{indentfirst}
+\usepackage[colorlinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsmath,amssymb}
+\usepackage{footnote}
+\usepackage[inline]{enumitem}
+
+\usepackage[calc,style=default]{datetime2}
+\DTMsetup{datesep={--},datetimesep=T}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{language=SQL,
+  basicstyle={\ttfamily},
+  belowskip=4mm,
+  breakatwhitespace=true,
+  breaklines=true,
+  classoffset=0,
+  columns=flexible,
+  commentstyle=\color{dkgreen},
+  frame=single,
+  framexleftmargin=2em,
+  xleftmargin=2em,
+  keywordstyle=\color{blue},
+  numbers=left, %If you do not want line numbers, set `numbers=none`
+  numberstyle=\small,
+  showstringspaces=false,
+  stringstyle=\color{mauve},
+  tabsize=4
+}
+
+\title{
+	\begin{center}
+  		\includegraphics[width=0.125\textwidth]{./images/units-logo.pdf}\\
+  		\smallskip
+  		\Large {University of Trieste}\\
+		\smallskip
+  		\large \textit{Data Management for Big Data} Course\\
+		\smallskip
+		\small Academic Year 2022--2023\\
+  		\rule{9cm}{.4pt}\\
+		\medskip
+  	\end{center}
+	Data Warehouse case study
+}
+
+\author{Sandro Junior Della Rovere\thanks{\texttt{sandrojunior.dellarovere@studenti.units.it}}
+\and Davide Capone\thanks{\texttt{davide.capone@studenti.units.it}}
+\and Enrico Stefanel\thanks{\texttt{enrico.stefanel@studenti.units.it}}}
+
+
+\DTMsavenow{now}%
+\DTMtozulu{now}{currzulu}
+\date{\footnotesize Last update on \DTMuse{currzulu}.}
+%\date{\today}
+
+\begin{document}
+
+\maketitle
+
+
+\input{content/00_introduction}
+\input{content/01_query1}
+\input{content/02_query2}
+\input{content/03_query3}
+
+
+\end{document}
