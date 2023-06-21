@@ -5,4 +5,44 @@
 
 \section{Export/import revenue value}
 
-Lorem ipsum\dots
+\subsection{Na\"{i}ve Implementation}
+
+\begin{lstlisting}
+WITH query1 AS (
+SELECT
+	EXTRACT (YEAR FROM o_orderdate) AS _year,
+	EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
+	EXTRACT (MONTH FROM o_orderdate) AS _month,
+	c_regionname,
+	c_nationname,
+	c_name,
+	s_regionname,
+	s_nationname,
+	s_name,
+	p_type,
+	SUM(l_extendedprice * (1 - l_discount)) AS revenue
+FROM lineitem_orders 
+	JOIN part ON l_partkey = p_partkey
+	JOIN supplier_location ON (s_suppkey = l_suppkey)
+	JOIN customer_location ON (c_custkey = o_custkey)
+WHERE s_nationkey <> c_nationkey
+GROUP BY
+	_year,
+	_quarter,
+	_month,
+	c_regionkey,
+	c_regionname,
+	c_nationkey,
+	c_nationname,
+	c_custkey,
+	c_name,
+	s_regionkey,
+	s_regionname,
+	s_nationkey,
+	s_nationname,
+	s_suppkey,
+	s_name,
+	p_type
+) 
+SELECT * FROM query1;
+\end{lstlisting}
