@@ -5,37 +5,37 @@
 
 \section{Introduction}
 
-The aim of this project is to study an efficient implementation of a Postgres database using the public TPC-H benchmark, which can be considered as a Big Data source.
+The aim of this project is to study an efficient implementation of a suite of business oriented ad-hoc queries over the public TPC-H benchmark, which can be considered as a Big Data database, that has been implemented in Postgres.
 
 \subsection{TPC-H benchmark database}
 
-The TPC-H benchmark can be downloaded
+The TPC-H benchmark is a decision support benchmark that can be downloaded from the \href{https://www.tpc.org/tpch/}{TPC official website}. The data generator lets the user specify a \textit{scale factor} in order to control the size of the resulted database. Our choices was to use a \textit{scale factor} of \num{10}, meaning that the overall database size is approximately \SI{13}{\giga\byte}.
 
 \subsubsection{Database statistics}
 
-The benchmark is composed by the following tables:
+The benchmark is composed by eight tables:
 \begin{itemize}
-	\item CUSTOMER, with \num{1500000} tuples (\SI{312}{\mega\byte});
-	\item LINEITEM, with \num{59986052} tuples (\SI{11}{\giga\byte}); the main attributes that are going to be used are:
+	\item \texttt{CUSTOMER}, with \num{1500000} tuples (\SI{312}{\mega\byte});
+	\item \texttt{LINEITEM}, with \num{59986052} tuples (\SI{11}{\giga\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
 			\item \texttt{l\_extendedprice} (\num{1351462} distinct values, i.e.\ there is an average of \num{44} tuples with the same value, that range from \num{900.91} to \num{104949.50}),
 			\item \texttt{l\_discount} (\num{11} distinct values, i.e.\ there is an average of \num{5453277} tuples with the same value, that range from \num{0.00} to \num{0.10}),
-			\item \texttt{l\_returnflag} (which can assume values \texttt{A}$\rightarrow$not returned, \texttt{R}$\rightarrow$returned, \texttt{N}$\rightarrow$not yet delivered),
-			\item l\_commitdate,
-			\item l\_receiptdate,
+			\item \texttt{l\_returnflag} (which can assume values \texttt{A}$\rightarrow$accepted, \texttt{R}$\rightarrow$returned, \texttt{N}$\rightarrow$not yet delivered; the percentage of tuples for each value is roughly the same),
+			\item \texttt{l\_commitdate},
+			\item \texttt{l\_receiptdate};
 		\end{itemize}
-	\item NATION, with \num{25} tuples (\SI{24}{\kilo\byte});
-	\item ORDERS, with \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
+	\item \texttt{NATION}, with \num{25} tuples (\SI{24}{\kilo\byte});
+	\item \texttt{ORDERS}, with \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
-			\item o\_orderdate,
+			\item \texttt{o\_orderdate},
 		\end{itemize}
-	\item PART, with \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
+	\item \texttt{PART}, with \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
-			\item p\_type;
+			\item \texttt{p\_type};
 		\end{itemize}
-	\item PARTSUPP, with \num{8000000} tuples (\SI{1535}{\mega\byte});
-	\item REGION, with \num{5} tuples (\SI{24}{\kilo\byte});
-	\item SUPPLIER, with \num{100000} tuples (\SI{20}{\mega\byte}).
+	\item \texttt{PARTSUPP}, with \num{8000000} tuples (\SI{1535}{\mega\byte});
+	\item \texttt{REGION}, with \num{5} tuples (\SI{24}{\kilo\byte});
+	\item \texttt{SUPPLIER}, with \num{100000} tuples (\SI{20}{\mega\byte}).
 \end{itemize}
 
-Other attributes have been used (e.g., keys used to join relations), but statistics about them have been omitted for lack of usefulness.
+Other attributes have been used, but statistics about them have been omitted for lack of usefulness (e.g., keys of the tables, for which the cardinality is exactly the cardinality of the corresponding table).
