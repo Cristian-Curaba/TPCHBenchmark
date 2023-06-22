@@ -15,8 +15,8 @@ The TPC-H benchmark is a decision support benchmark that can be downloaded from 
 
 The benchmark is composed by eight tables:
 \begin{itemize}
-	\item \texttt{CUSTOMER}, with \num{1500000} tuples (\SI{312}{\mega\byte});
-	\item \texttt{LINEITEM}, with \num{59986052} tuples (\SI{11}{\giga\byte}); the main attributes that are going to be used are:
+	\item \texttt{CUSTOMER}, with \num{16} columns and \num{1500000} tuples (\SI{312}{\mega\byte});
+	\item \texttt{LINEITEM}, with \num{32} columns and \num{59986052} tuples (\SI{11}{\giga\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
 			\item \texttt{l\_extendedprice} (\num{1351462} distinct values, i.e.\ there is an average of \num{44} tuples with the same value, that range from \num{900.91} to \num{104949.50}),
 			\item \texttt{l\_discount} (\num{11} distinct values, i.e.\ there is an average of \num{5453277} tuples with the same value, that range from \num{0.00} to \num{0.10}),
@@ -24,18 +24,18 @@ The benchmark is composed by eight tables:
 			\item \texttt{l\_commitdate},
 			\item \texttt{l\_receiptdate};
 		\end{itemize}
-	\item \texttt{NATION}, with \num{25} tuples (\SI{24}{\kilo\byte});
-	\item \texttt{ORDERS}, with \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
+	\item \texttt{NATION}, with \num{8} columns and \num{25} tuples (\SI{24}{\kilo\byte});
+	\item \texttt{ORDERS}, with \num{18} columns and \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
 			\item \texttt{o\_orderdate},
 		\end{itemize}
-	\item \texttt{PART}, with \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
+	\item \texttt{PART}, with \num{18} columns and \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
 			\item \texttt{p\_type};
 		\end{itemize}
-	\item \texttt{PARTSUPP}, with \num{8000000} tuples (\SI{1535}{\mega\byte});
-	\item \texttt{REGION}, with \num{5} tuples (\SI{24}{\kilo\byte});
-	\item \texttt{SUPPLIER}, with \num{100000} tuples (\SI{20}{\mega\byte}).
+	\item \texttt{PARTSUPP}, \num{10} columns and with \num{8000000} tuples (\SI{1535}{\mega\byte});
+	\item \texttt{REGION}, \num{6} columns and with \num{5} tuples (\SI{24}{\kilo\byte});
+	\item \texttt{SUPPLIER}, \num{14} columns and with \num{100000} tuples (\SI{20}{\mega\byte}).
 \end{itemize}
 
 Other attributes have been used, but statistics about them have been omitted for lack of usefulness (e.g., keys of the tables, for which the cardinality is exactly the cardinality of the corresponding table).
