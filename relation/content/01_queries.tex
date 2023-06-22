@@ -8,73 +8,74 @@
 \subsection{Export/import revenue value}
 
 \begin{lstlisting}
-	WITH lineitem_orders AS (
-		SELECT 
-			l_partkey, 
-			l_suppkey, 
-			o_orderdate, 
-			o_custkey, 
-			l_extendedprice, 
-			l_discount
-		FROM lineitem JOIN orders ON (l_orderkey = o_orderkey)
-	), customer_location AS (
-		SELECT 
-			c_custkey, 
-			c_name, 
-			n_nationkey AS c_nationkey, 
-			n_name AS c_nationname, 
-			r_regionkey AS c_regionkey, 
-			r_name AS c_regionname 
-		FROM customer 
-			JOIN nation ON (c_nationkey = n_nationkey)
-			JOIN region ON (n_regionkey = r_regionkey)
-	), supplier_location AS (
-		SELECT 
-			s_suppkey, 
-			s_name, 
-			n_nationkey AS s_nationkey, 
-			n_name AS s_nationname, 
-			r_regionkey AS s_regionkey, 
-			r_name AS s_regionname 
-		FROM supplier 
-			JOIN nation ON (s_nationkey = n_nationkey)
-			JOIN region ON (n_regionkey = r_regionkey)
-	), query1 AS (
-		SELECT
-			EXTRACT (YEAR FROM o_orderdate) AS _year,
-			EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
-			EXTRACT (MONTH FROM o_orderdate) AS _month,
-			c_regionname,
-			c_nationname,
-			c_name,
-			s_regionname,
-			s_nationname,
-			s_name,
-			p_type,
-			SUM(l_extendedprice * (1 - l_discount)) AS revenue
-		FROM lineitem_orders 
-			JOIN part ON l_partkey = p_partkey
-			JOIN supplier_location ON (s_suppkey = l_suppkey)
-			JOIN customer_location ON (c_custkey = o_custkey)
-		WHERE s_nationkey <> c_nationkey
-		GROUP BY
-			_year,
-			_quarter,
-			_month,
-			c_regionkey,
-			c_regionname,
-			c_nationkey,
-			c_nationname,
-			c_custkey,
-			c_name,
-			s_regionkey,
-			s_regionname,
-			s_nationkey,
-			s_nationname,
-			s_suppkey,
-			s_name,
-			p_type
-	) 
+WITH lineitem_orders AS (
+	SELECT 
+		l_partkey, 
+		l_suppkey, 
+		o_orderdate, 
+		o_custkey, 
+		l_extendedprice, 
+		l_discount
+	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey)
+), customer_location AS (
+	SELECT 
+		c_custkey, 
+		c_name, 
+		n_nationkey AS c_nationkey, 
+		n_name AS c_nationname, 
+		r_regionkey AS c_regionkey, 
+		r_name AS c_regionname 
+	FROM customer 
+		JOIN nation ON (c_nationkey = n_nationkey)
+		JOIN region ON (n_regionkey = r_regionkey)
+), supplier_location AS (
+	SELECT 
+		s_suppkey, 
+		s_name, 
+		n_nationkey AS s_nationkey, 
+		n_name AS s_nationname, 
+		r_regionkey AS s_regionkey, 
+		r_name AS s_regionname 
+	FROM supplier 
+		JOIN nation ON (s_nationkey = n_nationkey)
+		JOIN region ON (n_regionkey = r_regionkey)
+), query1 AS (
+	SELECT
+		EXTRACT (YEAR FROM o_orderdate) AS _year,
+		EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
+		EXTRACT (MONTH FROM o_orderdate) AS _month,
+		c_regionname,
+		c_nationname,
+		c_name,
+		s_regionname,
+		s_nationname,
+		s_name,
+		p_type,
+		SUM(l_extendedprice * (1 - l_discount)) AS revenue
+	FROM lineitem_orders 
+		JOIN part ON l_partkey = p_partkey
+		JOIN supplier_location ON (s_suppkey = l_suppkey)
+		JOIN customer_location ON (c_custkey = o_custkey)
+	WHERE s_nationkey <> c_nationkey
+	GROUP BY
+		_year,
+		_quarter,
+		_month,
+		c_regionkey,
+		c_regionname,
+		c_nationkey,
+		c_nationname,
+		c_custkey,
+		c_name,
+		s_regionkey,
+		s_regionname,
+		s_nationkey,
+		s_nationname,
+		s_suppkey,
+		s_name,
+		p_type
+)
+SELECT * FROM query1;
 \end{lstlisting}
 
 
@@ -84,7 +85,7 @@ It is asked to retrieve the number of orders where at least one ``lineitem'' has
 The aggregation should be performed with the Month $\rightarrow$ Year roll-up, and the (Customer's) Nation $\rightarrow$ Region roll-up.
 
 \begin{lstlisting}
-    WITH lineitem_orders AS (
+WITH lineitem_orders AS (
 	SELECT
 		o_orderkey, 
 		l_partkey, 
@@ -140,15 +141,11 @@ for all qualifying \textit{lineitems}.
 WITH lineitem_orders AS (
 	SELECT 
 		o_orderkey, 
-		l_partkey, 
-		l_suppkey, 
 		o_orderdate, 
 		o_custkey, 
 		l_extendedprice, 
 		l_discount, 
-		l_returnflag,
-		l_commitdate,
-		l_receiptdate
+		l_returnflag
 	FROM lineitem JOIN orders ON (l_orderkey=o_orderkey)
 ),
 query3 AS (
