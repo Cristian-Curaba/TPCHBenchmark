@@ -5,7 +5,9 @@
 
 \section{Returned item loss}
 
-It is asked to retrieve the \textit{revenue loss} for customers who might be having problems with the parts that are shipped to them, where a \textit{revenue loss} is defined as \texttt{SUM(l\_extendedprice*(1-l\_discount))} for all qualifying \textit{lineitems}.
+It is asked to retrieve the \textit{revenue loss} for customers who might be having problems with the parts that are shipped to them, where a \textit{revenue loss} is defined as
+$$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$
+for all qualifying \textit{lineitems}.
 
 \subsection{Na\"{i}ve implementation}
 
@@ -47,3 +49,5 @@ GROUP BY
 )
 SELECT * FROM query3;
 \end{lstlisting}
+
+Five independent runs of the above query obtained the following execution times: \SI{753541.744}{\milli\s}, \SI{672530.120}{\milli\s}, \SI{624276.525}{\milli\s}, \SI{615741.447}{\milli\s} and \SI{634262.713}{\milli\s}.
