@@ -51,3 +51,23 @@ SELECT * FROM query3;
 \end{lstlisting}
 
 Five independent runs of the above query obtained the following execution times: \SI{753541.744}{\milli\s}, \SI{672530.120}{\milli\s}, \SI{624276.525}{\milli\s}, \SI{615741.447}{\milli\s} and \SI{634262.713}{\milli\s}.
+
+\subsection{With materialized views}
+
+\begin{lstlisting}
+CREATE MATERIALIZED VIEW lineitem_orders AS
+	SELECT 
+		o_orderkey, 
+		l_partkey, 
+		l_suppkey, 
+		o_orderdate, 
+		o_custkey, 
+		l_extendedprice, 
+		l_discount, 
+		l_returnflag,
+		l_commitdate,
+		l_receiptdate
+	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey);
+\end{lstlisting}
+
+Five independent runs of the above query obtained the following execution times: \SI{467347.201}{\milli\s}, \SI{482158.205}{\milli\s}, \SI{443404.643}{\milli\s}, \SI{410564.982}{\milli\s} and \SI{445882.209}{\milli\s}.

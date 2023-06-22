@@ -20,18 +20,18 @@ The benchmark is composed by eight tables:
 		\begin{itemize}
 			\item \texttt{l\_extendedprice} (\num{1351462} distinct values, i.e.\ there is an average of \num{44} tuples with the same value, that range from \num{900.91} to \num{104949.50}),
 			\item \texttt{l\_discount} (\num{11} distinct values, i.e.\ there is an average of \num{5453277} tuples with the same value, that range from \num{0.00} to \num{0.10}),
-			\item \texttt{l\_returnflag} (which can assume values \texttt{A}$\rightarrow$accepted, \texttt{R}$\rightarrow$returned, \texttt{N}$\rightarrow$not yet delivered; the percentage of tuples for each value is roughly the same),
-			\item \texttt{l\_commitdate},
-			\item \texttt{l\_receiptdate};
+			\item \texttt{l\_returnflag} (which can assume values \texttt{A}$\rightarrow$accepted, \texttt{R}$\rightarrow$returned, \texttt{N}$\rightarrow$not yet delivered; the percentage of tuples for \texttt{A} and \texttt{R} are almost \SI{25}{\percent}, while the percentage of tuples where \texttt{l\_returnflag} is \texttt{N} is about \SI{50}{\percent}),
+			\item \texttt{l\_commitdate} (\num{2466} distinct values, i.e.\ there is an average of \num{24325} tuples with the same value, that range from {1992-01-31} to {1998-10-31}),
+			\item \texttt{l\_receiptdate} (\num{2555} distinct values, i.e.\ there is an average of \num{23478} tuples with the same value, that range from {1992-01-03} to {1998-12-31});
 		\end{itemize}
 	\item \texttt{NATION}, with \num{8} columns and \num{25} tuples (\SI{24}{\kilo\byte});
 	\item \texttt{ORDERS}, with \num{18} columns and \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
-			\item \texttt{o\_orderdate},
+			\item \texttt{o\_orderdate} (\num{2406} distinct values, i.e.\ there is an average of \num{6234} tuples with the same value, that range from {1992-01-01} to {1998-08-02});
 		\end{itemize}
 	\item \texttt{PART}, with \num{18} columns and \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
 		\begin{itemize}
-			\item \texttt{p\_type};
+			\item \texttt{p\_type} (\num{150} distinct values, i.e.\ there is an average of \num{13333} tuples with the same value);
 		\end{itemize}
 	\item \texttt{PARTSUPP}, \num{10} columns and with \num{8000000} tuples (\SI{1535}{\mega\byte});
 	\item \texttt{REGION}, \num{6} columns and with \num{5} tuples (\SI{24}{\kilo\byte});
