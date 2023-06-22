@@ -21,37 +21,37 @@ The aggregation should be performed with the Month $\rightarrow$ Year roll-up, a
 		l_commitdate,
 		l_receiptdate
 	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey)
-), customer_location AS (
-	SELECT 
-		c_custkey, 
-		n_nationkey AS c_nationkey, 
-		n_name AS c_nationname, 
-		r_regionkey AS c_regionkey, 
-		r_name AS c_regionname 
-	FROM customer 
-		JOIN nation ON (c_nationkey = n_nationkey)
-		JOIN region ON (n_regionkey = r_regionkey)
-), query2 AS (
-SELECT 
-	EXTRACT(YEAR FROM o_orderdate) AS _year,
-	EXTRACT(MONTH FROM o_orderdate) AS _month,
-	c_regionname,
-	c_nationname,
-	COUNT(DISTINCT(o_orderkey)) AS orders_no
-FROM lineitem_orders
-	JOIN part ON l_partkey = p_partkey
-	JOIN customer_location ON (c_custkey = o_custkey)
-WHERE 
-	l_receiptdate > l_commitdate
-	-- AND _month = 1
-	-- AND p_type = 'PROMO BURNISHED COPPER'
-GROUP BY
-	_year,
-	_month,
-	c_regionkey,
-	c_regionname,
-	c_nationkey,
-	c_nationname
-)
-SELECT * FROM query2;
+    ), customer_location AS (
+        SELECT 
+            c_custkey, 
+            n_nationkey AS c_nationkey, 
+            n_name AS c_nationname, 
+            r_regionkey AS c_regionkey, 
+            r_name AS c_regionname 
+        FROM customer 
+            JOIN nation ON (c_nationkey = n_nationkey)
+            JOIN region ON (n_regionkey = r_regionkey)
+    ), query2 AS (
+    SELECT 
+        EXTRACT(YEAR FROM o_orderdate) AS _year,
+        EXTRACT(MONTH FROM o_orderdate) AS _month,
+        c_regionname,
+        c_nationname,
+        COUNT(DISTINCT(o_orderkey)) AS orders_no
+    FROM lineitem_orders
+        JOIN part ON l_partkey = p_partkey
+        JOIN customer_location ON (c_custkey = o_custkey)
+    WHERE 
+        l_receiptdate > l_commitdate
+        -- AND _month = 1
+        -- AND p_type = 'PROMO BURNISHED COPPER'
+    GROUP BY
+        _year,
+        _month,
+        c_regionkey,
+        c_regionname,
+        c_nationkey,
+        c_nationname
+    )
+    SELECT * FROM query2;
 \end{lstlisting}
