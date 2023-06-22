@@ -1,0 +1,54 @@
+%!TEX TS-program = pdflatex
+%!TEX root = ../main.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+\section{Conclusions}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque mollis odio felis, eu aliquam velit congue at. Morbi et aliquet risus. Sed varius, diam vel semper varius, nibh mi bibendum est, vel molestie magna elit nec elit. Morbi ut facilisis mi. Suspendisse tristique porta purus, ac convallis tellus porta et. Maecenas ac semper justo, ut tincidunt turpis. Proin euismod viverra nisi iaculis accumsan. Suspendisse hendrerit suscipit purus sed viverra. Nullam gravida suscipit sagittis. Donec at pulvinar nunc. Donec consequat nibh elit, ornare posuere nisi feugiat laoreet. Vivamus nec imperdiet justo.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+      \begin{axis}[
+      width=.8\textwidth,
+      height=20em,
+      major x tick style = transparent,
+      ybar=2*\pgflinewidth,
+      %bar width=25pt,
+      ymajorgrids = true,
+      symbolic x coords={Q1,Q2,Q3},
+      xtick = data,
+      scaled y ticks = false,
+      yticklabel={\SI[round-mode=places, round-precision=2]{\tick}{\sec}},
+      enlarge x limits=.5,
+      ymin=0,
+      legend cell align=left,
+      legend style={at={(0.5,1.05)},anchor=south},
+  ]
+      \addplot[style={fill=red},error bars/.cd, y dir=both, y explicit]
+          coordinates {
+          (Q1, 2.98) += (0,0.2) -= (0,0.1)
+          (Q2,4.23) += (0,0.2) -= (0,0.1)
+          (Q3,4.23) += (0,0.2) -= (0,0.1)};
+
+      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
+           coordinates {
+           (Q1,4.33) += (0,0.2) -= (0,0.1)
+           (Q2,3.82) += (0,0.5) -= (0,0.2)
+           (Q3,3.82) += (0,0.5) -= (0,0.2)};
+
+      \addplot[style={fill=blue},error bars/.cd, y dir=both, y explicit]
+           coordinates {
+           (Q1,4.33) += (0,0.2) -= (0,0.1)
+           (Q2,3.82) += (0,0.5) -= (0,0.2)
+           (Q3,3.82) += (0,0.5) -= (0,0.2)};
+
+      \legend{Na\"{i}ve query, With materialized views, With materialized views and indexes}
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Query timings}
+  \label{fig:graph}
+\end{figure}
+
+Mauris vitae eros lacus. Etiam facilisis orci ac nunc tincidunt, sed vehicula sem ultrices. Sed dignissim velit elit, vel dictum tortor feugiat eget. Nulla nec sagittis quam. Cras diam mauris, suscipit vel urna in, congue laoreet diam. In consequat, nisi non iaculis interdum, risus lacus auctor nisi, in sagittis massa libero in nibh. Phasellus venenatis urna eu nibh maximus ullamcorper. Pellentesque tincidunt, nulla vel ultrices malesuada, justo velit sollicitudin orci, vitae euismod ipsum nisl non magna.
