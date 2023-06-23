@@ -74,6 +74,45 @@ EXPLAIN ANALYSE VERBOSE WITH lineitem_orders AS (
 		p_type
 )
 SELECT * FROM query1;
+
+--- With Materialized views version:
+EXPLAIN ANALYSE VERBOSE WITH query1 AS (
+	SELECT
+		EXTRACT (YEAR FROM o_orderdate) AS _year,
+		EXTRACT (QUARTER FROM o_orderdate) AS _quarter,
+		EXTRACT (MONTH FROM o_orderdate) AS _month,
+		c_regionname,
+		c_nationname,
+		c_name,
+		s_regionname,
+		s_nationname,
+		s_name,
+		p_type,
+		SUM(l_extendedprice * (1 - l_discount)) AS revenue
+	FROM lineitem_orders_mv 
+		JOIN part ON l_partkey = p_partkey
+		JOIN supplier_location_mv ON (s_suppkey = l_suppkey)
+		JOIN customer_location_mv ON (c_custkey = o_custkey)
+	WHERE s_nationkey <> c_nationkey
+	GROUP BY
+		_year,
+		_quarter,
+		_month,
+		c_regionkey,
+		c_regionname,
+		c_nationkey,
+		c_nationname,
+		c_custkey,
+		c_name,
+		s_regionkey,
+		s_regionname,
+		s_nationkey,
+		s_nationname,
+		s_suppkey,
+		s_name,
+		p_type
+)
+SELECT * FROM query1;
 	
 --QUERY 2:
 --- Vanilla version:
@@ -107,6 +146,31 @@ SELECT
 FROM lineitem_orders
 	JOIN part ON l_partkey = p_partkey
 	JOIN customer_location ON (c_custkey = o_custkey)
+WHERE 
+	l_receiptdate > l_commitdate
+	-- AND _month = 1
+	-- AND p_type = 'PROMO BURNISHED COPPER'
+GROUP BY
+	_year,
+	_month,
+	c_regionkey,
+	c_regionname,
+	c_nationkey,
+	c_nationname
+)
+SELECT * FROM query2;
+
+--- With Materialized views version:
+EXPLAIN ANALYSE VERBOSE WITH query2 AS (
+SELECT 
+	EXTRACT(YEAR FROM o_orderdate) AS _year,
+	EXTRACT(MONTH FROM o_orderdate) AS _month,
+	c_regionname,
+	c_nationname,
+	COUNT(DISTINCT(o_orderkey)) AS orders_no
+FROM lineitem_orders_mv
+	JOIN part ON l_partkey = p_partkey
+	JOIN customer_location_mv ON (c_custkey = o_custkey)
 WHERE 
 	l_receiptdate > l_commitdate
 	-- AND _month = 1
@@ -165,7 +229,7 @@ SELECT
 	c_name,
 	SUM(l_extendedprice * (1 - l_discount)) AS returnloss
 FROM
-	lineitem_orders
+	lineitem_orders_mv
 	JOIN customer ON o_custkey = c_custkey
 WHERE 
 	l_returnflag = 'R'
@@ -181,8 +245,8 @@ GROUP BY
 SELECT * FROM query3;
 
 -- Materialized views definitions:
-/*
-CREATE MATERIALIZED VIEW lineitem_orders AS
+
+CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 	SELECT 
 		o_orderkey, 
 		l_partkey, 
@@ -195,9 +259,8 @@ CREATE MATERIALIZED VIEW lineitem_orders AS
 		l_commitdate,
 		l_receiptdate
 	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey);
-*/
 
-CREATE MATERIALIZED VIEW customer_location AS
+CREATE MATERIALIZED VIEW customer_location_mv AS
 	SELECT 
 		c_custkey, 
 		c_name, 
@@ -210,7 +273,7 @@ CREATE MATERIALIZED VIEW customer_location AS
 		JOIN region ON (n_regionkey = r_regionkey);
 		
 --
-CREATE MATERIALIZED VIEW supplier_location AS
+CREATE MATERIALIZED VIEW supplier_location_mv AS
 	SELECT 
 		s_suppkey, 
 		s_name, 
