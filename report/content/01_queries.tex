@@ -7,6 +7,10 @@
 
 \subsection{Export/import revenue value}
 
+It is asked to return the \textit{export/import revenue} between two different nations (E, I) where E is the nation of the lineitem supplier 
+and I the nation of the lineitem customer, and where the \textit{revenue} is defined as $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$. 
+The aggregation should be performed with the Month $\rightarrow$ Quarter $\rightarrow$ Year, (Part) Type and Nation $\rightarrow$ Region roll-ups.
+
 \begin{lstlisting}
 WITH lineitem_orders AS (
 	SELECT 
