@@ -8,8 +8,10 @@
 \subsection{Export/import revenue value}
 
 It is asked to return the \textit{export/import revenue} between two different nations (E, I) where E is the nation of the lineitem supplier 
-and I the nation of the lineitem customer, and where the \textit{revenue} is defined as $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$. 
+and I the nation of the lineitem customer, and where the \textit{revenue} is defined as $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$.
 The aggregation should be performed with the Month $\rightarrow$ Quarter $\rightarrow$ Year, (Part) Type and Nation $\rightarrow$ Region roll-ups.
+
+The query is implemented in such a way that it allows the slicing over (Part) Type and Exporting Nation.
 
 \begin{lstlisting}
 WITH lineitem_orders AS (
@@ -60,7 +62,10 @@ WITH lineitem_orders AS (
 		JOIN part ON l_partkey = p_partkey
 		JOIN supplier_location ON (s_suppkey = l_suppkey)
 		JOIN customer_location ON (c_custkey = o_custkey)
-	WHERE s_nationkey <> c_nationkey
+	WHERE
+		s_nationkey <> c_nationkey
+		-- AND p_type = 'PROMO BURNISHED COPPER'
+		-- AND s_nationname = 'UNITED STATES'
 	GROUP BY
 		_year,
 		_quarter,
@@ -86,7 +91,10 @@ SELECT * FROM query1;
 \subsection{Late delivery}
 
 It is asked to retrieve the number of orders where at least one ``lineitem'' has been received later than the committed date.
+
 The aggregation should be performed with the Month $\rightarrow$ Year roll-up, and the (Customer's) Nation $\rightarrow$ Region roll-up.
+
+The query has been implemented in such a way that it allows the slicing over a specific Month, and a specific (Part) Type.
 
 \begin{lstlisting}
 WITH lineitem_orders AS (
@@ -140,6 +148,10 @@ SELECT * FROM query2;
 It is asked to retrieve the \textit{revenue loss} for customers who might be having problems with the parts that are shipped to them, where a \textit{revenue loss} is defined as
 $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$
 for all qualifying \textit{lineitems}.
+
+The aggregations should be performed with the Month $\rightarrow$ Quarter $\rightarrow$ Year and Customer roll-ups.
+
+The query has been implemented in such a way that it allows the slicing over the Name of a Customer combined with a specific Quarter.
 
 \begin{lstlisting}
 WITH lineitem_orders AS (

@@ -54,7 +54,10 @@ EXPLAIN ANALYSE VERBOSE WITH lineitem_orders AS (
 		JOIN part ON l_partkey = p_partkey
 		JOIN supplier_location ON (s_suppkey = l_suppkey)
 		JOIN customer_location ON (c_custkey = o_custkey)
-	WHERE s_nationkey <> c_nationkey
+	WHERE
+		s_nationkey <> c_nationkey
+		-- AND p_type = 'PROMO BURNISHED COPPER'
+		-- AND s_nationname = 'UNITED STATES'
 	GROUP BY
 		_year,
 		_quarter,
@@ -93,7 +96,10 @@ EXPLAIN ANALYSE VERBOSE WITH query1 AS (
 		JOIN part ON l_partkey = p_partkey
 		JOIN supplier_location_mv ON (s_suppkey = l_suppkey)
 		JOIN customer_location_mv ON (c_custkey = o_custkey)
-	WHERE s_nationkey <> c_nationkey
+	WHERE
+		s_nationkey <> c_nationkey
+		-- AND p_type = 'PROMO BURNISHED COPPER'
+		-- AND s_nationname = 'UNITED STATES'
 	GROUP BY
 		_year,
 		_quarter,
