@@ -5,7 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{babel}
 \usepackage{indentfirst}
-\usepackage[colorlinks]{hyperref}
+\usepackage[]{hyperref}
 \usepackage{graphicx}
 \usepackage{paralist}
 \usepackage{amsmath,amssymb}
@@ -42,7 +42,7 @@
   showstringspaces=false,
   stringstyle=\color{mauve},
   tabsize=4,
-  morekeywords={with,quarter}
+  morekeywords={with,materialized,quarter}
 }
 
 \title{
@@ -74,11 +74,13 @@
 
 \maketitle
 
+\tableofcontents
+
 
 \input{content/00_introduction}
 \input{content/01_queries}
-\input{content/02_indexes}
-\input{content/03_materialisation}
+\input{content/02_materialisation}
+\input{content/03_indexes}
 %\input{content/04_fragmentation}
 \input{content/05_conclusions}
 

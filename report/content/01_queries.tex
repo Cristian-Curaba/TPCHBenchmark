@@ -176,4 +176,24 @@ GROUP BY
 SELECT * FROM query3;
 \end{lstlisting}
 
-Five independent runs of the above query obtained the following execution times: \SI{753541.744}{\milli\s}, \SI{672530.120}{\milli\s}, \SI{624276.525}{\milli\s}, \SI{615741.447}{\milli\s} and \SI{634262.713}{\milli\s}.
+\subsection{Execution times}
+
+The query timings have been measured as previously discussed in \autoref{subsection:organizationwork}.
+Furthermore, no consecutive runs have been performed on the same query, in order to reduce external biases (following a Round-Robin schema).
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ \hline
+ 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ \hline
+ 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ \hline
+\end{tabular}
+  \caption{Na\"{i}ve query timings, in seconds.}
+  \label{tab:vanillatimings}
+\end{table}

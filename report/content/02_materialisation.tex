@@ -1,0 +1,73 @@
+%!TEX TS-program = pdflatex
+%!TEX root = ../main.tex
+%!TEX encoding = UTF-8 Unicode
+
+
+\section{Materialization}
+\label{section:materialization}
+
+After a study on the given set of queries, some common intermediate results have been detected between the three. In order to try lowering the average execution cost, materialized views have been defined starting from the said results.
+
+\begin{lstlisting}
+-- used by Q1, Q2, Q3
+CREATE MATERIALIZED VIEW lineitem_orders_mv AS
+	SELECT 
+		o_orderkey, 
+		l_partkey, 
+		l_suppkey, 
+		o_orderdate, 
+		o_custkey, 
+		l_extendedprice, 
+		l_discount, 
+		l_returnflag,
+		l_commitdate,
+		l_receiptdate
+	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey);
+
+-- used by Q1 and Q2
+CREATE MATERIALIZED VIEW customer_location_mv AS
+	SELECT 
+		c_custkey, 
+		c_name, 
+		n_nationkey AS c_nationkey, 
+		n_name AS c_nationname, 
+		r_regionkey AS c_regionkey, 
+		r_name AS c_regionname 
+	FROM customer 
+		JOIN nation ON (c_nationkey = n_nationkey)
+		JOIN region ON (n_regionkey = r_regionkey);
+		
+-- used by Q1 and Q2
+CREATE MATERIALIZED VIEW supplier_location_mv AS
+	SELECT 
+		s_suppkey, 
+		s_name, 
+		n_nationkey AS s_nationkey, 
+		n_name AS s_nationname, 
+		r_regionkey AS s_regionkey, 
+		r_name AS s_regionname 
+	FROM supplier 
+		JOIN nation ON (s_nationkey = n_nationkey)
+		JOIN region ON (n_regionkey = r_regionkey);
+\end{lstlisting}
+
+\subsection{Execution times}
+
+As for the base versions of queries, we collected statistics on execution timings and results can be observed on \autoref{tab:materializationstimings}. Further considerations are reported in the \autoref{section:conclusions}.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ \hline
+ 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ \hline
+ 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ \hline
+\end{tabular}
+  \caption{Query timings with materialized views, in seconds.}
+  \label{tab:materializationstimings}
+\end{table}
