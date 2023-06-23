@@ -285,8 +285,56 @@ CREATE MATERIALIZED VIEW supplier_location_mv AS
 		JOIN nation ON (s_nationkey = n_nationkey)
 		JOIN region ON (n_regionkey = r_regionkey);
 		
+
 -- Index definitions:
+--- Indexes on relations
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_l_suppkey_idx
+    ON lineitem USING btree
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_l_partkey_idx
+    ON lineitem USING btree
+    (l_partkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS order_o_orderdate_idx
+    ON orders USING btree
+    (o_orderdate ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS order_o_custkey_idx
+    ON orders USING btree
+    (o_custkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+--- Indexes on materialized views:
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_orderkey_idx
+    ON lineitem_orders_mv USING btree
+    (o_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_l_suppkey_idx
+    ON lineitem_orders_mv USING btree
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_orders_l_partkey_idx
+    ON lineitem_orders_mv USING btree
+    (l_partkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_orderdate_idx
+    ON lineitem_orders_mv USING btree
+    (o_orderdate ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_custkey_idx
+    ON lineitem_orders_mv USING btree
+    (o_custkey ASC NULLS LAST)
     TABLESPACE pg_default;
