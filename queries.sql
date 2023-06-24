@@ -293,7 +293,7 @@ CREATE MATERIALIZED VIEW supplier_location_mv AS
 		
 
 -- Index definitions:
---- Indexes on relations
+--- Indexes on common attributes between at least two relations
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
@@ -319,7 +319,59 @@ CREATE INDEX IF NOT EXISTS order_o_custkey_idx
     (o_custkey ASC NULLS LAST)
     TABLESPACE pg_default;
 
+CREATE INDEX IF NOT EXISTS part_p_type_idx
+	ON part USING btree
+	(p_type ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_nationkey_idx
+	ON supplier USING btree
+	(s_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_nationname_idx
+	ON supplier USING btree
+	(s_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_regionkey_idx
+	ON supplier USING btree
+	(s_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_regionname_idx
+	ON supplier USING btree
+	(s_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_nationkey_idx
+	ON customer USING btree
+	(c_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_nationname_idx
+	ON customer USING btree
+	(c_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_regionkey_idx
+	ON customer USING btree
+	(c_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_regionname_idx
+	ON customer USING btree
+	(c_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_name_idx
+	ON customer USING btree
+	(c_name ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+
 --- Indexes on materialized views:
+---- Indexes on common attributes between at least two materialized views
 CREATE INDEX IF NOT EXISTS lineitem_orders_o_orderkey_idx
     ON lineitem_orders_mv USING btree
     (o_orderkey ASC NULLS LAST)
@@ -344,3 +396,48 @@ CREATE INDEX IF NOT EXISTS lineitem_orders_o_custkey_idx
     ON lineitem_orders_mv USING btree
     (o_custkey ASC NULLS LAST)
     TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_nationkey_idx
+	ON supplier_location_mv USING btree
+	(s_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_nationname_idx
+	ON supplier_location_mv USING btree
+	(s_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_regionkey_idx
+	ON supplier_location_mv USING btree
+	(s_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_regionname_idx
+	ON supplier_location_mv USING btree
+	(s_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_nationkey_idx
+	ON customer_location_mv USING btree
+	(c_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_nationname_idx
+	ON customer_location_mv USING btree
+	(c_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_regionkey_idx
+	ON customer_location_mv USING btree
+	(c_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_regionname_idx
+	ON customer_location_mv USING btree
+	(c_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
+	ON customer_location_mv USING btree
+	(c_name ASC NULLS LAST)
+	TABLESPACE pg_default;
