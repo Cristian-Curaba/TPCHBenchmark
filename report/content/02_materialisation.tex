@@ -8,8 +8,12 @@
 
 After a study on the given set of queries, some common intermediate results have been detected between the three. In order to try lowering the average execution cost, materialized views have been defined starting from the said results.
 
+Furthermore, since the problem considers dealing with a data warehouse (OLAP), there won't be frequent updates, so materialized views are a smart choice.
+
+\subsection{Lineitem - Orders View}
+Since all the queries perform a join between relations \textit{lineitem} and \textit{orders}, an idea is to pre-process this join by creating a materialized view.
+
 \begin{lstlisting}
--- used by Q1, Q2, Q3
 CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 	SELECT 
 		o_orderkey, 
@@ -23,8 +27,14 @@ CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 		l_commitdate,
 		l_receiptdate
 	FROM lineitem JOIN orders ON (l_orderkey = o_orderkey);
+\end{lstlisting}
 
--- used by Q1 and Q2
+This materialized view is composed by \num{59986052} rows, and weighs \SI{4378}{\mega\byte}.
+
+\subsubsection{Customer - Location View}
+Queries 1 and 2 execute a join operation between \textit{customer}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
+
+\begin{lstlisting}
 CREATE MATERIALIZED VIEW customer_location_mv AS
 	SELECT 
 		c_custkey, 
@@ -36,7 +46,14 @@ CREATE MATERIALIZED VIEW customer_location_mv AS
 	FROM customer 
 		JOIN nation ON (c_nationkey = n_nationkey)
 		JOIN region ON (n_regionkey = r_regionkey);
-		
+\end{lstlisting}
+
+This materialized view is composed by \num{1500000} rows, and weighs \SI{167}{\mega\byte}.
+
+\subsubsection{Supplier - Location View}
+Finally, queries 1 and 2 execute a join operation between \textit{supplier}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
+
+\begin{lstlisting}
 -- used by Q1 and Q2
 CREATE MATERIALIZED VIEW supplier_location_mv AS
 	SELECT 
@@ -50,6 +67,8 @@ CREATE MATERIALIZED VIEW supplier_location_mv AS
 		JOIN nation ON (s_nationkey = n_nationkey)
 		JOIN region ON (n_regionkey = r_regionkey);
 \end{lstlisting}
+
+This materialized view is composed by \num{100000} rows, and weighs \SI{12}{\mega\byte}.
 
 \subsection{Execution times}
 

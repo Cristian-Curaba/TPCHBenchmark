@@ -5,4 +5,202 @@
 
 \section{Indexes design}
 
-\dots
+Indexes may help to further reduce the query execution times. In order to design the indexes, the queries have been executed with the \texttt{EXPLAIN ANALYSE} tool, which helps to detect the most expensive operations that are involved.
+
+It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the most costly, so the indexes were built on the attributes involved in the aforementioned operations and also on the ones involved in \texttt{WHERE} clauses. Only attributes that are used by at least two queries have been considered.
+
+\subsection{Indexes on relations}
+
+\begin{lstlisting}
+CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
+    ON lineitem USING btree
+    (l_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_l_suppkey_idx
+    ON lineitem USING btree
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_l_partkey_idx
+    ON lineitem USING btree
+    (l_partkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS order_o_orderdate_idx
+    ON orders USING btree
+    (o_orderdate ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS order_o_custkey_idx
+    ON orders USING btree
+    (o_custkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS part_p_type_idx
+	ON part USING btree
+	(p_type ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_nationkey_idx
+	ON supplier USING btree
+	(s_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_nationname_idx
+	ON supplier USING btree
+	(s_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_regionkey_idx
+	ON supplier USING btree
+	(s_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_s_regionname_idx
+	ON supplier USING btree
+	(s_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_nationkey_idx
+	ON customer USING btree
+	(c_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_nationname_idx
+	ON customer USING btree
+	(c_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_regionkey_idx
+	ON customer USING btree
+	(c_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_regionname_idx
+	ON customer USING btree
+	(c_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_c_name_idx
+	ON customer USING btree
+	(c_name ASC NULLS LAST)
+	TABLESPACE pg_default;
+\end{lstlisting}
+
+\subsubsection{Execution times}
+
+The tests have been performed without the materialized views. In \autoref{subsection:indexes_mv} also materialized views are going to be considered.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ \hline
+ 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ \hline
+ 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ \hline
+\end{tabular}
+  \caption{Query timings with indexes, in seconds.}
+  \label{tab:materializationstimings}
+\end{table}
+
+\subsection{Indexes on Materialized Views}\label{subsection:indexes_mv}
+Trying to additionally cut the query costs, also indexes on the materialized views have been designed, following the same strategy as before.
+
+\begin{lstlisting}
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_orderkey_idx
+    ON lineitem_orders_mv USING btree
+    (o_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_l_suppkey_idx
+    ON lineitem_orders_mv USING btree
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_orders_l_partkey_idx
+    ON lineitem_orders_mv USING btree
+    (l_partkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_orderdate_idx
+    ON lineitem_orders_mv USING btree
+    (o_orderdate ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_orders_o_custkey_idx
+    ON lineitem_orders_mv USING btree
+    (o_custkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_nationkey_idx
+	ON supplier_location_mv USING btree
+	(s_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_nationname_idx
+	ON supplier_location_mv USING btree
+	(s_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_regionkey_idx
+	ON supplier_location_mv USING btree
+	(s_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_location_s_regionname_idx
+	ON supplier_location_mv USING btree
+	(s_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_nationkey_idx
+	ON customer_location_mv USING btree
+	(c_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_nationname_idx
+	ON customer_location_mv USING btree
+	(c_nationname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_regionkey_idx
+	ON customer_location_mv USING btree
+	(c_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_regionname_idx
+	ON customer_location_mv USING btree
+	(c_regionname ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
+	ON customer_location_mv USING btree
+	(c_name ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+\end{lstlisting}
+
+\subsubsection{Execution times}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ \hline
+ 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ \hline
+ 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ \hline
+\end{tabular}
+  \caption{Query timings with indexes and materialized views, in seconds.}
+  \label{tab:materializationstimings}
+\end{table}
+
