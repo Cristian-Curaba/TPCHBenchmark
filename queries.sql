@@ -56,8 +56,8 @@ EXPLAIN ANALYSE VERBOSE WITH lineitem_orders AS (
 		JOIN customer_location ON (c_custkey = o_custkey)
 	WHERE
 		s_nationkey <> c_nationkey
-		-- AND p_type = 'PROMO BURNISHED COPPER'
-		-- AND s_nationname = 'UNITED STATES'
+		AND p_type = 'PROMO BURNISHED COPPER'
+		AND s_nationname = 'UNITED STATES'
 	GROUP BY
 		_year,
 		_quarter,
@@ -98,8 +98,8 @@ EXPLAIN ANALYSE VERBOSE WITH query1 AS (
 		JOIN customer_location_mv ON (c_custkey = o_custkey)
 	WHERE
 		s_nationkey <> c_nationkey
-		-- AND p_type = 'PROMO BURNISHED COPPER'
-		-- AND s_nationname = 'UNITED STATES'
+		AND p_type = 'PROMO BURNISHED COPPER'
+		AND s_nationname = 'UNITED STATES'
 	GROUP BY
 		_year,
 		_quarter,
@@ -154,8 +154,8 @@ FROM lineitem_orders
 	JOIN customer_location ON (c_custkey = o_custkey)
 WHERE 
 	l_receiptdate > l_commitdate
-	-- AND EXTRACT(MONTH FROM o_orderdate) = 1
-	-- AND p_type = 'PROMO BURNISHED COPPER'
+	AND EXTRACT(MONTH FROM o_orderdate) = 1
+	AND p_type = 'PROMO BURNISHED COPPER'
 GROUP BY
 	_year,
 	_month,
@@ -179,8 +179,8 @@ FROM lineitem_orders_mv
 	JOIN customer_location_mv ON (c_custkey = o_custkey)
 WHERE 
 	l_receiptdate > l_commitdate
-	-- AND EXTRACT(MONTH FROM o_orderdate) = 1
-	-- AND p_type = 'PROMO BURNISHED COPPER'
+	AND EXTRACT(MONTH FROM o_orderdate) = 1
+	AND p_type = 'PROMO BURNISHED COPPER'
 GROUP BY
 	_year,
 	_month,
@@ -215,8 +215,8 @@ FROM
 	JOIN customer ON (o_custkey=c_custkey)
 WHERE 
 	l_returnflag='R'
-	-- AND c_name='Customer#000129976'
-	-- AND EXTRACT(QUARTER FROM o_orderdate) = 1
+	AND c_name='Customer#000129976'
+	AND EXTRACT(QUARTER FROM o_orderdate) = 1
 GROUP BY
 	_year,
 	_quarter,
@@ -239,8 +239,8 @@ FROM
 	JOIN customer ON o_custkey = c_custkey
 WHERE 
 	l_returnflag = 'R'
-	-- AND c_name = 'Customer#000129976'
-	-- AND EXTRACT (QUARTER FROM o_orderdate) = 1
+	AND c_name = 'Customer#000129976'
+	AND EXTRACT (QUARTER FROM o_orderdate) = 1
 GROUP BY
 	_year,
 	_quarter,
