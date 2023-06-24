@@ -154,7 +154,7 @@ FROM lineitem_orders
 	JOIN customer_location ON (c_custkey = o_custkey)
 WHERE 
 	l_receiptdate > l_commitdate
-	-- AND _month = 1
+	-- AND EXTRACT(MONTH FROM o_orderdate) = 1
 	-- AND p_type = 'PROMO BURNISHED COPPER'
 GROUP BY
 	_year,
@@ -179,7 +179,7 @@ FROM lineitem_orders_mv
 	JOIN customer_location_mv ON (c_custkey = o_custkey)
 WHERE 
 	l_receiptdate > l_commitdate
-	-- AND _month = 1
+	-- AND EXTRACT(MONTH FROM o_orderdate) = 1
 	-- AND p_type = 'PROMO BURNISHED COPPER'
 GROUP BY
 	_year,
@@ -292,7 +292,8 @@ CREATE MATERIALIZED VIEW supplier_location_mv AS
 		JOIN region ON (n_regionkey = r_regionkey);
 		
 
--- Index definitions:
+-- Index definitions
+-- Indexes on relations:
 --- Indexes on common attributes between at least two relations
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
