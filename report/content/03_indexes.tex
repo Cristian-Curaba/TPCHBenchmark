@@ -12,14 +12,19 @@ It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the mos
 \subsection{Indexes on relations}
 
 \begin{lstlisting}
-CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
+	CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
     TABLESPACE pg_default;
 
-CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_partkey_suppkey_idx
+CREATE INDEX IF NOT EXISTS lineitem_l_suppkey_idx
     ON lineitem USING btree
-    (l_orderkey ASC NULLS LAST, l_partkey ASC NULLS LAST, l_suppkey ASC NULLS LAST)
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_l_partkey_idx
+    ON lineitem USING btree
+    (l_partkey ASC NULLS LAST)
     TABLESPACE pg_default;
 
 CREATE INDEX IF NOT EXISTS order_o_orderdate_idx
