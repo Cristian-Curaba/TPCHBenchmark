@@ -340,19 +340,9 @@ CREATE INDEX IF NOT EXISTS supplier_s_nationkey_idx
 	(s_nationkey ASC NULLS LAST)
 	TABLESPACE pg_default;
 
-CREATE INDEX IF NOT EXISTS supplier_s_regionkey_idx
-	ON supplier USING btree
-	(s_regionkey ASC NULLS LAST)
-	TABLESPACE pg_default;
-
 CREATE INDEX IF NOT EXISTS customer_c_nationkey_idx
 	ON customer USING btree
 	(c_nationkey ASC NULLS LAST)
-	TABLESPACE pg_default;
-
-CREATE INDEX IF NOT EXISTS customer_c_regionkey_idx
-	ON customer USING btree
-	(c_regionkey ASC NULLS LAST)
 	TABLESPACE pg_default;
 
 CREATE INDEX IF NOT EXISTS customer_c_name_idx
