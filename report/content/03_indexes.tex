@@ -11,7 +11,8 @@ It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the mos
 
 \subsection{Indexes on relations}
 
-\begin{lstlisting}CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
+\begin{lstlisting}
+CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
     TABLESPACE pg_default;
