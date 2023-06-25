@@ -68,6 +68,8 @@ CREATE INDEX IF NOT EXISTS customer_c_name_idx
 	TABLESPACE pg_default;
 \end{lstlisting}
 
+The total weight of the database at this point is \SI{21}{\giga\byte}, in this way the bound given in \autoref{section:introductiooon} is satisfied for the mandatory part of the project, what follows concerns optional optimizations and it is not guaranteed that the limit remains fulfilled.
+
 \subsubsection{Execution times}
 
 The tests have been performed without the materialized views. In \autoref{subsection:indexes_mv} also materialized views are going to be considered.
