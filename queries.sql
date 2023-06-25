@@ -269,7 +269,10 @@ CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 CREATE MATERIALIZED VIEW customer_location_mv AS
 	SELECT 
 		c_custkey, 
-		c_name, 
+		c_name, CREATE INDEX IF NOT EXISTS supplier_s_regionkey_idx
+	ON supplier USING btree
+	(s_regionkey ASC NULLS LAST)
+	TABLESPACE pg_default;
 		n_nationkey AS c_nationkey, 
 		n_name AS c_nationname, 
 		r_regionkey AS c_regionkey, 
@@ -300,14 +303,9 @@ CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     (l_orderkey ASC NULLS LAST)
     TABLESPACE pg_default;
 
-CREATE INDEX IF NOT EXISTS lineitem_l_suppkey_idx
+CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_partkey_suppkey_idx
     ON lineitem USING btree
-    (l_suppkey ASC NULLS LAST)
-    TABLESPACE pg_default;
-	
-CREATE INDEX IF NOT EXISTS lineitem_l_partkey_idx
-    ON lineitem USING btree
-    (l_partkey ASC NULLS LAST)
+    ((l_orderkey, l_partkey, l_suppkey) ASC NULLS LAST)
     TABLESPACE pg_default;
 
 CREATE INDEX IF NOT EXISTS order_o_orderdate_idx
