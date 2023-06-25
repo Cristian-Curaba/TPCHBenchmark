@@ -305,7 +305,7 @@ CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
 
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_partkey_suppkey_idx
     ON lineitem USING btree
-    ((l_orderkey, l_partkey, l_suppkey) ASC NULLS LAST)
+    (l_orderkey ASC NULLS LAST, l_partkey ASC NULLS LAST, l_suppkey ASC NULLS LAST)
     TABLESPACE pg_default;
 
 CREATE INDEX IF NOT EXISTS order_o_orderdate_idx
