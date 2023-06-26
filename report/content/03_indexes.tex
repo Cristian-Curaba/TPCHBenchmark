@@ -166,9 +166,11 @@ CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
 	TABLESPACE pg_default;
 \end{lstlisting}
 
-The total weight of the database with the indexes on defined materialized views is \SI{23}{\giga\byte} (\num{1.6} times the size of the initial database).
+The total weight of the database with the indexes on materialized views (which have been defined in \autoref{section:materialization}) is \SI{23}{\giga\byte} (\num{1.6} times the size of the initial database).
 
 \subsubsection{Execution times}
+
+The results of execution times for five independent runs on each query with all the aforementioned indexes (on tables and on materialized views) can be seen in \autoref{tab:indexesviewsstimings}.
 
 \begin{table}[!h]
 \centering
@@ -183,7 +185,7 @@ The total weight of the database with the indexes on defined materialized views 
  3 & 83 & 44 & 66 & 44 & 42 & 56 & 18 \\
  \hline
 \end{tabular}
-  \caption{Query timings with indexes on materialized views, in milliseconds.}
+  \caption{Query timings with indexes on tables and materialized views, in milliseconds.}
   \label{tab:indexesviewsstimings}
 \end{table}
 

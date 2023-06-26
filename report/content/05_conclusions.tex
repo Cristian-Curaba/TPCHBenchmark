@@ -6,12 +6,9 @@
 \section{Conclusions}
 \label{section:conclusions}
 
-Siccome nelle viste materializzate ci sono più attributi rispetto alle tabelle intermedie con WITH, nella prima query, allora quella query è più pesante con le viste materializzate.
 
 \begin{figure}[h]
 \centering
-
-\begin{minipage}{.3\textwidth}
 \begin{tikzpicture}
       \begin{axis}[
       width=.8\textwidth,
@@ -23,115 +20,40 @@ Siccome nelle viste materializzate ci sono più attributi rispetto alle tabelle 
       ymajorgrids = true,
       symbolic x coords={Q1,Q2,Q3},
       xtick = data,
-      scaled y ticks = false,
+      scaled y ticks = true,
       yticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
       enlarge x limits=.5,
       ymin=0,
       legend cell align=left,
       legend style={at={(0.5,1.05)},anchor=south},
   ]
-      \addplot[style={fill=red},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=2B2A4C},error bars/.cd, y dir=both, y explicit]
           coordinates {
-          (Q1,40.029) += (0,.971) -= (0,.971) %% (query_name, avg_cost) += (0,std) -= (0,std)
-};
-
-      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-          (Q1,15.392) += (0,.483) -= (0,.483)
-};
-
-      \addplot[style={fill=pink},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-          (Q1,33.472) += (0,1.556) -= (0,1.556)
-};
-
-      \addplot[style={fill=blue},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-           (Q1,21.486) += (0,0.658) -= (0,0.658)
-};
-
-      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes}
-  \end{axis}
-  \end{tikzpicture}
-\end{minipage}
-\begin{minipage}{.3\textwidth}
-\begin{tikzpicture}
-      \begin{axis}[
-      width=.8\textwidth,
-      height=20em,
-      major x tick style = transparent,
-      ybar=2*\pgflinewidth,
-      %bar width=25pt,
-      ylabel={Execution times},
-      ymajorgrids = true,
-      symbolic x coords={Q1,Q2,Q3},
-      xtick = data,
-      scaled y ticks = false,
-      yticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
-      enlarge x limits=.5,
-      ymin=0,
-      legend cell align=left,
-      legend style={at={(0.5,1.05)},anchor=south},
-  ]
-      \addplot[style={fill=red},error bars/.cd, y dir=both, y explicit]
-          coordinates {
-          (Q2,47.626) += (0,2.626) -= (0,2.626)};
-
-      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-          (Q2,16.153) += (0,.910) -= (0,.910)};
-
-      \addplot[style={fill=pink},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-          (Q2,54.506) += (0,1.100) -= (0,1.100)};
-
-      \addplot[style={fill=blue},error bars/.cd, y dir=both, y explicit]
-           coordinates {
-           (Q2,24.052) += (0,1.069) -= (0,1.069)};
-
-      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes}
-  \end{axis}
-  \end{tikzpicture}
-\end{minipage}
-\begin{minipage}{.3\textwidth}
-\begin{tikzpicture}
-      \begin{axis}[
-      width=.8\textwidth,
-      height=20em,
-      major x tick style = transparent,
-      ybar=2*\pgflinewidth,
-      %bar width=25pt,
-      ylabel={Execution times},
-      ymajorgrids = true,
-      symbolic x coords={Q1,Q2,Q3},
-      xtick = data,
-      scaled y ticks = false,
-      yticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
-      enlarge x limits=.5,
-      ymin=0,
-      legend cell align=left,
-      legend style={at={(0.5,1.05)},anchor=south},
-  ]
-      \addplot[style={fill=red},error bars/.cd, y dir=both, y explicit]
-          coordinates {
+          (Q1,40.029) += (0,.971) -= (0,.971)
+          (Q2,47.626) += (0,2.626) -= (0,2.626)
           (Q3,7.893) += (0,.915) -= (0,.915)};
 
-      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=B31312},error bars/.cd, y dir=both, y explicit]
            coordinates {
+           (Q1,15.392) += (0,.483) -= (0,.483)
+           (Q2,16.153) += (0,.910) -= (0,.910)
           (Q3,14.608) += (0,.732) -= (0,.732)};
 
-      \addplot[style={fill=pink},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=EA906C},error bars/.cd, y dir=both, y explicit]
            coordinates {
-          (Q3,0.067) += (0,0.025) -= (0,0.025)};
+           (Q1,33.472) += (0,1.556) -= (0,1.556)
+           (Q2,54.506) += (0,1.100) -= (0,1.100)
+           (Q3,0.067) += (0,0.025) -= (0,0.025)};
 
-      \addplot[style={fill=blue},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=EEE2DE},error bars/.cd, y dir=both, y explicit]
            coordinates {
+           (Q1,21.486) += (0,0.658) -= (0,0.658)
+           (Q2,24.052) += (0,1.069) -= (0,1.069)
            (Q3,0.056) += (0,0.018) -= (0,0.018)};
 
       \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes}
   \end{axis}
   \end{tikzpicture}
-\end{minipage}
   \caption{Query timings}
   \label{fig:graph}
 \end{figure}
