@@ -31,7 +31,7 @@ CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 
 This materialized view is composed by \num{59986052} rows, and weighs \SI{4378}{\mega\byte}.
 
-\subsubsection{Customer - Location View}
+\subsection{Customer - Location View}
 Queries 1 and 2 execute a join operation between \textit{customer}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
 
 \begin{lstlisting}
@@ -50,11 +50,10 @@ CREATE MATERIALIZED VIEW customer_location_mv AS
 
 This materialized view is composed by \num{1500000} rows, and weighs \SI{167}{\mega\byte}.
 
-\subsubsection{Supplier - Location View}
+\subsection{Supplier - Location View}
 Finally, queries 1 and 2 execute a join operation between \textit{supplier}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
 
 \begin{lstlisting}
--- used by Q1 and Q2
 CREATE MATERIALIZED VIEW supplier_location_mv AS
 	SELECT 
 		s_suppkey, 

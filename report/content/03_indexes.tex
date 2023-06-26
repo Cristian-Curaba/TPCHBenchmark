@@ -12,7 +12,7 @@ It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the mos
 \subsection{Indexes on relations}
 
 \begin{lstlisting}
-	CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
+CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
     ON lineitem USING btree
     (l_orderkey ASC NULLS LAST)
     TABLESPACE pg_default;
@@ -68,27 +68,27 @@ CREATE INDEX IF NOT EXISTS customer_c_name_idx
 	TABLESPACE pg_default;
 \end{lstlisting}
 
-The total weight of the database at this point is \SI{21}{\giga\byte}, in this way the bound given in \autoref{section:introductiooon} is satisfied for the mandatory part of the project, what follows concerns optional optimizations and it is not guaranteed that the limit remains fulfilled.
+The total weight of the database at this point is \SI{21}{\giga\byte}, in this way the bound given in \autoref{section:introduction} is satisfied for the mandatory part of the project. What follows concerns optional optimizations and it is not guaranteed that the limit remains fulfilled.
 
 \subsubsection{Execution times}
 
-The tests have been performed without the materialized views. In \autoref{subsection:indexes_mv} also materialized views are going to be considered.
+The tests have been performed without the materialized views. In \autoref{subsection:indexes_mv} also materialized views are going to be considered. Results are reported in \autoref{tab:indexesstimings}.
 
-\begin{table}[!h]
+\begin{table}[h!]
 \centering
 \begin{tabular}{|| c | c c c c c | c c ||} 
  \hline
  Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
  \hline\hline
- 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ 1 & 35740 & 34379 & 32891 & 32285 & 32067 & 33472 & 1556 \\ 
  \hline
- 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ 2 & 55374 & 53992 & 53613 & 53575 & 55976 & 54506 & 1100 \\
  \hline
- 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ 3 & 61 & 101 & 45 & 86 & 46 & 67 & 25 \\
  \hline
 \end{tabular}
-  \caption{Query timings with indexes, in seconds.}
-  \label{tab:materializationstimings}
+  \caption{Query timings with indexes, in milliseconds.}
+  \label{tab:indexesstimings}
 \end{table}
 
 \subsection{Indexes on Materialized Views}\label{subsection:indexes_mv}
@@ -164,8 +164,9 @@ CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
 	ON customer_location_mv USING btree
 	(c_name ASC NULLS LAST)
 	TABLESPACE pg_default;
-
 \end{lstlisting}
+
+The total weight of the database with the indexes on defined materialized views is \SI{23}{\giga\byte} (\num{1.6} times the size of the initial database).
 
 \subsubsection{Execution times}
 
@@ -175,14 +176,14 @@ CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
  \hline
  Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
  \hline\hline
- 1 & 643 & 685 & 724 & 698 & 813 & 713 & 63 \\ 
+ 1 & 22314 & 21998 & 21013 & 21356 & 20749 & 21486 & 658 \\ 
  \hline
- 2 & 201 & 203 & 205 & 203 & 203 & 203 & 2 \\
+ 2 & 24344 & 25531 & 22948 & 23063 & 24373 & 24052 & 1069 \\
  \hline
- 3 & 98 & 102 & 101 & 102 & 101 & 101 & 2 \\
+ 3 & 83 & 44 & 66 & 44 & 42 & 56 & 18 \\
  \hline
 \end{tabular}
-  \caption{Query timings with indexes and materialized views, in seconds.}
-  \label{tab:materializationstimings}
+  \caption{Query timings with indexes on materialized views, in milliseconds.}
+  \label{tab:indexesviewsstimings}
 \end{table}
 
