@@ -5,6 +5,248 @@
 
 \section{Fragmentation}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque mollis odio felis, eu aliquam velit congue at. Morbi et aliquet risus. Sed varius, diam vel semper varius, nibh mi bibendum est, vel molestie magna elit nec elit. Morbi ut facilisis mi. Suspendisse tristique porta purus, ac convallis tellus porta et. Maecenas ac semper justo, ut tincidunt turpis. Proin euismod viverra nisi iaculis accumsan. Suspendisse hendrerit suscipit purus sed viverra. Nullam gravida suscipit sagittis. Donec at pulvinar nunc. Donec consequat nibh elit, ornare posuere nisi feugiat laoreet. Vivamus nec imperdiet justo.
+To conclude the testings, it has been decided to try vertical fragmentation.
 
-Mauris vitae eros lacus. Etiam facilisis orci ac nunc tincidunt, sed vehicula sem ultrices. Sed dignissim velit elit, vel dictum tortor feugiat eget. Nulla nec sagittis quam. Cras diam mauris, suscipit vel urna in, congue laoreet diam. In consequat, nisi non iaculis interdum, risus lacus auctor nisi, in sagittis massa libero in nibh. Phasellus venenatis urna eu nibh maximus ullamcorper. Pellentesque tincidunt, nulla vel ultrices malesuada, justo velit sollicitudin orci, vitae euismod ipsum nisl non magna.
+It makes sense to try such an approach, since queries only use a subset of attributes of the tables. Vertical fragmentation is usually implemented in distributes systems but it can still be useful in this case to reduce the workload induced by the queries.
+
+\begin{lstlisting}
+---- NATION: 
+----- no fragmentation, the fragment used by the queries will have 3 columns and the other 1 column only.
+
+---- REGION:
+----- no fragmentation, the fragment used by the queries will have 2 columns and the other 1 column only.
+
+---- CUSTOMER:
+CREATE TABLE IF NOT EXISTS customer_frag_1
+(
+    c_custkey integer NOT NULL,
+    c_name character varying(25) COLLATE pg_catalog."default" NOT NULL,
+    c_nationkey integer NOT NULL,
+    CONSTRAINT customer_frag_1_pkey PRIMARY KEY (c_custkey),
+    CONSTRAINT customer_frag_1_fk1 FOREIGN KEY (c_nationkey)
+        REFERENCES nation (n_nationkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+) AS
+SELECT
+	c_custkey,
+	c_name,
+	c_nationkey
+FROM customer;
+
+CREATE TABLE IF NOT EXISTS customer_frag_2
+(
+	c_custkey integer NOT NULL,
+    c_address character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    c_phone character(15) COLLATE pg_catalog."default" NOT NULL,
+    c_acctbal numeric(15,2) NOT NULL,
+    c_mktsegment character(10) COLLATE pg_catalog."default" NOT NULL,
+    c_comment character varying(117) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT customer_frag_2_pkey PRIMARY KEY (c_custkey)
+) AS
+SELECT
+	c_custkey,
+	c_address,
+	c_phone,
+	c_acctbal,
+	c_mktsegment,
+	c_comment
+FROM customer;
+
+---- SUPPLIER:
+CREATE TABLE IF NOT EXISTS supplier_frag_1
+(
+    s_suppkey integer NOT NULL,
+    s_name character(25) COLLATE pg_catalog."default" NOT NULL,
+    s_nationkey integer NOT NULL,
+    CONSTRAINT supplier_frag_1_pkey PRIMARY KEY (s_suppkey),
+    CONSTRAINT supplier_frag_1_fk1 FOREIGN KEY (s_nationkey)
+        REFERENCES nation (n_nationkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+) AS
+SELECT
+	s_suppkey,
+	s_name,
+	s_nationkey
+FROM supplier;
+
+CREATE TABLE IF NOT EXISTS supplier_frag_2
+(
+    s_suppkey integer NOT NULL,
+    s_address character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    s_phone character(15) COLLATE pg_catalog."default" NOT NULL,
+    s_acctbal numeric(15,2) NOT NULL,
+    s_comment character varying(101) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT supplier_frag_2_pkey PRIMARY KEY (s_suppkey)
+) AS
+SELECT
+	s_suppkey,
+	s_address,
+	s_phone,
+	s_acctbal,
+	s_comment
+FROM supplier;
+
+---- PARTSUPP: no fragmentation (table not used in queries)
+
+---- PART:
+CREATE TABLE IF NOT EXISTS part_frag_1
+(
+    p_partkey integer NOT NULL,
+    p_type character varying(25) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT part_frag_1_pkey PRIMARY KEY (p_partkey)
+) AS
+SELECT
+	p_partkey,
+	p_type
+FROM part;
+
+CREATE TABLE IF NOT EXISTS part_frag_2
+(
+    p_partkey integer NOT NULL,
+    p_name character varying(55) COLLATE pg_catalog."default" NOT NULL,
+    p_mfgr character(25) COLLATE pg_catalog."default" NOT NULL,
+    p_brand character(10) COLLATE pg_catalog."default" NOT NULL,
+    p_size integer NOT NULL,
+    p_container character(10) COLLATE pg_catalog."default" NOT NULL,
+    p_retailprice numeric(15,2) NOT NULL,
+    p_comment character varying(23) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT part_frag_2_pkey PRIMARY KEY (p_partkey)
+) AS
+SELECT 
+	p_partkey,
+	p_name,
+	p_mfgr,
+	p_brand,
+	p_size,
+	p_container,
+	p_retailprice,
+	p_comment
+FROM part;
+
+---- ORDERS:
+CREATE TABLE IF NOT EXISTS orders_frag_1
+(
+    o_orderkey integer NOT NULL,
+    o_custkey integer NOT NULL,
+    o_orderdate date NOT NULL,
+    CONSTRAINT orders_frag_1_pkey PRIMARY KEY (o_orderkey),
+    CONSTRAINT orders_frag_1_fk1 FOREIGN KEY (o_custkey)
+        REFERENCES customer (c_custkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+) AS
+SELECT
+	o_orderkey,
+	o_custkey,
+	o_orderdate
+FROM orders;
+
+CREATE TABLE IF NOT EXISTS orders_frag_2
+(
+    o_orderkey integer NOT NULL,
+    o_orderstatus character(1) COLLATE pg_catalog."default" NOT NULL,
+    o_totalprice numeric(15,2) NOT NULL,
+    o_orderpriority character(15) COLLATE pg_catalog."default" NOT NULL,
+    o_clerk character(15) COLLATE pg_catalog."default" NOT NULL,
+    o_shippriority integer NOT NULL,
+    o_comment character varying(79) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT orders_frag_2_pkey PRIMARY KEY (o_orderkey)
+) AS
+SELECT
+	o_orderkey,
+	o_orderstatus,
+	o_totalprice,
+	o_orderpriority,
+	o_clerk,
+	o_shippriority,
+	o_comment
+FROM orders;
+
+---- LINEITEM:
+CREATE TABLE IF NOT EXISTS lineitem_frag_1
+(
+    l_orderkey integer NOT NULL,
+    l_partkey integer NOT NULL,
+    l_suppkey integer NOT NULL,
+    l_linenumber integer NOT NULL,
+    l_extendedprice numeric(15,2) NOT NULL,
+    l_discount numeric(15,2) NOT NULL,
+    l_returnflag character(1) COLLATE pg_catalog."default" NOT NULL,
+    l_commitdate date NOT NULL,
+    l_receiptdate date NOT NULL,
+    CONSTRAINT lineitem_frag_1_pkey PRIMARY KEY (l_orderkey, l_linenumber),
+    CONSTRAINT lineitem_frag_1_fk1 FOREIGN KEY (l_orderkey)
+        REFERENCES orders (o_orderkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT lineitem_frag_1_fk2 FOREIGN KEY (l_partkey, l_suppkey)
+        REFERENCES partsupp (ps_partkey, ps_suppkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+) AS
+SELECT
+	l_orderkey,
+	l_linenumber,
+	l_partkey,
+	l_suppkey,
+	l_extendedprice,
+	l_discount,
+	l_returnflag,
+	l_commitdate,
+	l_receiptdate
+FROM lineitem;
+
+CREATE TABLE IF NOT EXISTS lineitem_frag_2
+(
+    l_orderkey integer NOT NULL,
+    l_linenumber integer NOT NULL,
+    l_quantity numeric(15,2) NOT NULL,
+    l_tax numeric(15,2) NOT NULL,
+    l_linestatus character(1) COLLATE pg_catalog."default" NOT NULL,
+    l_shipdate date NOT NULL,
+    l_shipinstruct character(25) COLLATE pg_catalog."default" NOT NULL,
+    l_shipmode character(10) COLLATE pg_catalog."default" NOT NULL,
+    l_comment character varying(44) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT lineitem_frag_2_pkey PRIMARY KEY (l_orderkey, l_linenumber),
+    CONSTRAINT lineitem_frag_2_fk FOREIGN KEY (l_orderkey)
+        REFERENCES orders (o_orderkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+) AS
+SELECT
+	l_orderkey,
+	l_linenumber,
+	l_quantity,
+	l_tax,
+	l_linestatus,
+	l_shipdate,
+	l_shipinstruct,
+	l_shipmode,
+	l_comment
+FROM lineitem;
+\end{lstlisting}
+
+The weight of the data warehouse with fragmented tables is roughly the same as the original one.
+
+\subsection{Execution times}
+
+Timings have been calculated using the queries defined in \autoref{sec:queries} by only changing tables names.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 24459 & 22156 & 21858 & 21829 & 21471 & 22355 & 1201 \\ 
+ \hline
+ 2 & 45378 & 40845 & 41757 & 40048 & 40449 & 41695 & 2154 \\
+ \hline
+ 3 & 143 & 164 & 61 & 67 & 93 & 106 & 46 \\
+ \hline
+\end{tabular}
+  \caption{Query timings using fragmentation, in milliseconds.}
+  \label{tab:fragmentationtimings}
+\end{table}

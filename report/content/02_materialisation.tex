@@ -8,7 +8,7 @@
 
 After a study on the given set of queries, some common intermediate results have been detected between the three. In order to try lowering the average execution cost, materialized views have been defined starting from the said results.
 
-Furthermore, since the problem considers dealing with a data warehouse (OLAP), there won't be frequent updates, so materialized views are a smart choice.
+Furthermore, since the problem considers dealing with a data warehouse (OLAP), there would not be frequent updates, so materialized views are a smart choice.
 
 \subsection{Lineitem - Orders View}
 Since all the queries perform a join between relations \textit{lineitem} and \textit{orders}, an idea is to pre-process this join by creating a materialized view.
@@ -165,6 +165,9 @@ GROUP BY
 )
 SELECT * FROM query3;
 \end{lstlisting}
+
+The total weight of the database with the materialized views is \SI{19}{\giga\byte}.
+
 
 \subsection{Execution times}
 

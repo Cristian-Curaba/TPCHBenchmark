@@ -11,8 +11,8 @@
 \centering
 \begin{tikzpicture}
       \begin{axis}[
-      width=.8\textwidth,
-      height=20em,
+      width=.9\textwidth,
+      height=30em,
       major x tick style = transparent,
       ybar=2*\pgflinewidth,
       %bar width=25pt,
@@ -23,9 +23,11 @@
       scaled y ticks = true,
       yticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
       enlarge x limits=.5,
-      ymin=0,
+      ymin=0, ymax=65,
       legend cell align=left,
       legend style={at={(0.5,1.05)},anchor=south},
+      nodes near coords,
+      every node near coord/.append style={yshift=.5em,anchor=south,font=\tiny,rotate=90, anchor=west},
   ]
       \addplot[style={fill=2B2A4C},error bars/.cd, y dir=both, y explicit]
           coordinates {
@@ -51,7 +53,91 @@
            (Q2,24.052) += (0,1.069) -= (0,1.069)
            (Q3,0.056) += (0,0.018) -= (0,0.018)};
 
-      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes}
+      \addplot[style={fill=pink},error bars/.cd, y dir=both, y explicit]
+           coordinates {
+           (Q1,15.839) += (0,0.558) -= (0,0.558)
+           (Q2,20.360) += (0,0.380) -= (0,0.380)
+           (Q3,2.294) += (0,0.147) -= (0,0.147)};
+
+      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
+           coordinates {
+           (Q1,22.355) += (0,1.201) -= (0,1.201)
+           (Q2,41.695) += (0,2.154) -= (0,2.154)
+           (Q3,0.106) += (0,0.046) -= (0,0.046)};
+
+      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes, With fragmentation, With fragmentation and indexes}
+  \end{axis}
+  \end{tikzpicture}
+  \caption{Query timings}
+  \label{fig:graph}
+\end{figure}
+
+
+
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+      \begin{axis}[
+      width=.9\textwidth,
+      height=30em,
+      major y tick style = transparent,
+      xbar=2*\pgflinewidth,
+      %bar width=25pt,
+      xlabel={Execution times},
+      xmajorgrids = true,
+      symbolic y coords={Q1,Q2,Q3},
+      ytick = data,
+      y dir=reverse,
+      scaled x ticks = true,
+      xticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
+      enlarge y limits=.5,
+      xmin=0, xmax=65,
+      legend cell align=left,
+      legend style={at={(0.5,1.05)},anchor=south},
+      nodes near coords,
+      every node near coord/.append style={xshift=1em,anchor=west,font=\footnotesize},
+  ]
+      \addplot[style={fill=2B2A4C},error bars/.cd, x dir=both, x explicit]
+          coordinates {
+          (40.029,Q1) += (.971,0) -= (.971,0)
+          (47.626,Q2) += (2.626,0) -= (2.626,0)
+          (7.893,Q3) += (.915,0) -= (.915,0)};
+          
+      \addplot[style={fill=B31312},error bars/.cd, x dir=both, x explicit]
+           coordinates {
+           (15.392,Q1) += (.483,0) -= (.483,0)
+           (16.153,Q2) += (.910,0) -= (.910,0)
+          (14.608,Q3) += (.732,0) -= (.732,0)};
+
+      \addplot[style={fill=EA906C},error bars/.cd, x dir=both, x explicit]
+           coordinates {
+           (33.472,Q1) += (1.556,0) -= (1.556,0)
+           (54.506,Q2) += (1.100,0) -= (1.100,0)
+           (0.067,Q3) += (0.025,0) -= (0.025,0)};
+
+      \addplot[style={fill=EEE2DE},error bars/.cd, x dir=both, x explicit]
+           coordinates {
+           (21.486,Q1) += (0.658,0) -= (0.658,0)
+           (24.052,Q2) += (1.069,0) -= (1.069,0)
+           (0.056,Q3) += (0.018,0) -= (0.018,0)};
+
+      \addplot[style={fill=pink},error bars/.cd, x dir=both, x explicit]
+           coordinates {
+           (15.839,Q1) += (0.558,0) -= (0.558,0)
+           (20.360,Q2) += (0.380,0) -= (0.380,0)
+           (2.294,Q3) += (0.147,0) -= (0.147,0)};
+
+      \addplot[style={fill=green},error bars/.cd, x dir=both, x explicit]
+           coordinates {
+           (22.355,Q1) += (1.201,0) -= (1.201,0)
+           (41.695,Q2) += (2.154,0) -= (2.154,0)
+           (0.106,Q3) += (0.046,0) -= (0.046,0)};
+          
+          
+
+
+      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes, With fragmentation, With fragmentation and indexes}
   \end{axis}
   \end{tikzpicture}
   \caption{Query timings}
