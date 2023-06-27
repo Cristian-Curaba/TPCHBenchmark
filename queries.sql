@@ -811,3 +811,51 @@ GROUP BY
 	c_name
 )
 SELECT * FROM query3;
+
+--- Indexes on fragments:
+CREATE INDEX IF NOT EXISTS lineitem_frag_1_l_orderkey_idx
+    ON lineitem_frag_1 USING btree
+    (l_orderkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS lineitem_frag_1_l_suppkey_idx
+    ON lineitem_frag_1 USING btree
+    (l_suppkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS lineitem_frag_1_l_partkey_idx
+    ON lineitem_frag_1 USING btree
+    (l_partkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS orders_frag_1_o_orderdate_idx
+    ON orders_frag_1 USING btree
+    (o_orderdate ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS orders_frag_1_o_custkey_idx
+    ON orders_frag_1 USING btree
+    (o_custkey ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS part_frag_1_p_type_idx
+	ON part_frag_1 USING btree
+	(p_type ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS supplier_frag_1_s_nationkey_idx
+	ON supplier_frag_1 USING btree
+	(s_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_frag_1_c_nationkey_idx
+	ON customer_frag_1 USING btree
+	(c_nationkey ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS customer_frag_1_c_name_idx
+	ON customer_frag_1 USING btree
+	(c_name ASC NULLS LAST)
+	TABLESPACE pg_default;
+
+-- Indexes on nation and region remain the same as the ones defined on the original tables.
