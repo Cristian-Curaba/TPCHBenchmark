@@ -631,17 +631,7 @@ SELECT
 INTO lineitem_frag_2
 FROM lineitem;
 
-ALTER TABLE lineSELECT
-	l_orderkey,
-	l_linenumber,
-	l_quantity,
-	l_tax,
-	l_linestatus,
-	l_shipdate,
-	l_shipinstruct,
-	l_shipmode,
-	l_comment
-FROM lineitem;item_frag_2
+ALTER TABLE lineitem_frag_2
 ALTER COLUMN l_orderkey SET NOT NULL,
 ALTER COLUMN l_linenumber SET NOT NULL,
 ALTER COLUMN l_quantity SET NOT NULL,
