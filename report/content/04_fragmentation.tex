@@ -4,6 +4,7 @@
 
 
 \section{Fragmentation}
+\label{sec:fragmentation}
 
 To conclude the testings, it has been decided to try vertical fragmentation.
 
@@ -230,9 +231,38 @@ FROM lineitem;
 
 The weight of the data warehouse with fragmented tables is roughly the same as the original one.
 
-\subsection{Execution times}
+\subsubsection{Execution times}
 
 Timings have been calculated using the queries defined in \autoref{sec:queries} by only changing tables names.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|| c | c c c c c | c c ||} 
+ \hline
+ Query & Run 1 & Run 2 & Run 3 & Run 4 & Run 5 & 	$\mu$ & $\sigma$ \\ [0.5ex] 
+ \hline\hline
+ 1 & 14977 & 15803 & 15851 & 16517 & 16047 & 15839 & 558 \\ 
+ \hline
+ 2 & 20368 & 20474 & 19809 & 20284 & 20866 & 20360 & 380 \\
+ \hline
+ 3 & 2478 & 2150 & 2145 & 2350 & 2346 & 2294 & 147 \\
+ \hline
+\end{tabular}
+  \caption{Query timings using fragmentation, in milliseconds.}
+  \label{tab:fragmentationtimings}
+\end{table}
+
+
+
+\subsection{Indexes on fragmented tables}
+
+Since the results shown in \autoref{tab:fragmentationtimings} are promising, it has been decided to implement the indexes (the ones defined in \autoref{subsec:indexesdef}) on the corresponding fragments.
+
+The total size of the data warehouse at this point is \SI{20}{\giga\byte}.
+
+
+\subsubsection{Execution times}
+
 
 \begin{table}[!h]
 \centering
@@ -247,6 +277,6 @@ Timings have been calculated using the queries defined in \autoref{sec:queries} 
  3 & 143 & 164 & 61 & 67 & 93 & 106 & 46 \\
  \hline
 \end{tabular}
-  \caption{Query timings using fragmentation, in milliseconds.}
-  \label{tab:fragmentationtimings}
+  \caption{Query timings using fragmentation and indexes, in milliseconds.}
+  \label{tab:fragmentationindexestimings}
 \end{table}

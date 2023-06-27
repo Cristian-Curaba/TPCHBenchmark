@@ -6,10 +6,25 @@
 \section{Conclusions}
 \label{section:conclusions}
 
+Considering the overall results shown in \autoref{fig:graph}, the optimal approach for optimising the efficiency of queries 1 (Export/import revenue value) and 2 (Late delivery) might be to use the materialized views proposed in \autoref{section:materialization} but this happens to be the worst-case scenario for query 3 (Returned item loss).
+The opposite situation occurs when using the indexes defined in \autoref{sec:indexes}: the query 3 is optimised, but queries 1 and 2 show roughly the same run times as the na\"{i}ve solution.
+
+Assuming that all the three queries have the same importance (i.e., none of them is being executed a lot more frequently than the others), a good trade-off may seem to use materialized views and indexes (\autoref{subsection:indexes_mv}). This solution, by the way, does not meet the size constraint of the project.
+
+The final solution that is being proposed for the given problem concerns using the (vertical) fragmentation reported in \autoref{sec:fragmentation} without any additional index. Query 1 is executed in \SI{15.84}{\s}, i.e.\ 2.5 times faster than the na\"{i}ve solution; query 2 runs in \SI{20.36}{\s}, i.e.\ it is 2.3 times faster than the related na\"{i}ve solution; query 3 is executed in \SI{2.29}{\s}, i.e.\ 3.5 times faster than the corresponding na\"{i}ve solution.
+
 
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}
+
+	\definecolor{Red}{RGB}{212, 42, 52}
+	\definecolor{Orange}{RGB}{247, 140, 55}
+	\definecolor{Yellow}{RGB}{255, 216, 39}
+	\definecolor{Apple}{RGB}{98, 202, 80}
+	\definecolor{Blue}{RGB}{6, 119, 186}
+	\definecolor{Grape}{RGB}{106, 50, 165}
+
       \begin{axis}[
       width=.9\textwidth,
       height=30em,
@@ -27,115 +42,43 @@
       legend cell align=left,
       legend style={at={(0.5,1.05)},anchor=south},
       nodes near coords,
-      every node near coord/.append style={yshift=.5em,anchor=south,font=\tiny,rotate=90, anchor=west},
+      every node near coord/.append style={yshift=.8em,anchor=south,font=\tiny,rotate=90, anchor=west},
   ]
-      \addplot[style={fill=2B2A4C},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Red},error bars/.cd, y dir=both, y explicit]
           coordinates {
           (Q1,40.029) += (0,.971) -= (0,.971)
           (Q2,47.626) += (0,2.626) -= (0,2.626)
           (Q3,7.893) += (0,.915) -= (0,.915)};
 
-      \addplot[style={fill=B31312},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Orange},error bars/.cd, y dir=both, y explicit]
            coordinates {
            (Q1,15.392) += (0,.483) -= (0,.483)
            (Q2,16.153) += (0,.910) -= (0,.910)
           (Q3,14.608) += (0,.732) -= (0,.732)};
 
-      \addplot[style={fill=EA906C},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Yellow},error bars/.cd, y dir=both, y explicit]
            coordinates {
            (Q1,33.472) += (0,1.556) -= (0,1.556)
            (Q2,54.506) += (0,1.100) -= (0,1.100)
            (Q3,0.067) += (0,0.025) -= (0,0.025)};
 
-      \addplot[style={fill=EEE2DE},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Apple},error bars/.cd, y dir=both, y explicit]
            coordinates {
            (Q1,21.486) += (0,0.658) -= (0,0.658)
            (Q2,24.052) += (0,1.069) -= (0,1.069)
            (Q3,0.056) += (0,0.018) -= (0,0.018)};
 
-      \addplot[style={fill=pink},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Blue},error bars/.cd, y dir=both, y explicit]
            coordinates {
            (Q1,15.839) += (0,0.558) -= (0,0.558)
            (Q2,20.360) += (0,0.380) -= (0,0.380)
            (Q3,2.294) += (0,0.147) -= (0,0.147)};
 
-      \addplot[style={fill=green},error bars/.cd, y dir=both, y explicit]
+      \addplot[style={fill=Grape},error bars/.cd, y dir=both, y explicit]
            coordinates {
            (Q1,22.355) += (0,1.201) -= (0,1.201)
            (Q2,41.695) += (0,2.154) -= (0,2.154)
            (Q3,0.106) += (0,0.046) -= (0,0.046)};
-
-      \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes, With fragmentation, With fragmentation and indexes}
-  \end{axis}
-  \end{tikzpicture}
-  \caption{Query timings}
-  \label{fig:graph}
-\end{figure}
-
-
-
-
-\begin{figure}[h]
-\centering
-\begin{tikzpicture}
-      \begin{axis}[
-      width=.9\textwidth,
-      height=30em,
-      major y tick style = transparent,
-      xbar=2*\pgflinewidth,
-      %bar width=25pt,
-      xlabel={Execution times},
-      xmajorgrids = true,
-      symbolic y coords={Q1,Q2,Q3},
-      ytick = data,
-      y dir=reverse,
-      scaled x ticks = true,
-      xticklabel={\SI[round-mode=places, round-precision=0]{\tick}{\s}},
-      enlarge y limits=.5,
-      xmin=0, xmax=65,
-      legend cell align=left,
-      legend style={at={(0.5,1.05)},anchor=south},
-      nodes near coords,
-      every node near coord/.append style={xshift=1em,anchor=west,font=\footnotesize},
-  ]
-      \addplot[style={fill=2B2A4C},error bars/.cd, x dir=both, x explicit]
-          coordinates {
-          (40.029,Q1) += (.971,0) -= (.971,0)
-          (47.626,Q2) += (2.626,0) -= (2.626,0)
-          (7.893,Q3) += (.915,0) -= (.915,0)};
-          
-      \addplot[style={fill=B31312},error bars/.cd, x dir=both, x explicit]
-           coordinates {
-           (15.392,Q1) += (.483,0) -= (.483,0)
-           (16.153,Q2) += (.910,0) -= (.910,0)
-          (14.608,Q3) += (.732,0) -= (.732,0)};
-
-      \addplot[style={fill=EA906C},error bars/.cd, x dir=both, x explicit]
-           coordinates {
-           (33.472,Q1) += (1.556,0) -= (1.556,0)
-           (54.506,Q2) += (1.100,0) -= (1.100,0)
-           (0.067,Q3) += (0.025,0) -= (0.025,0)};
-
-      \addplot[style={fill=EEE2DE},error bars/.cd, x dir=both, x explicit]
-           coordinates {
-           (21.486,Q1) += (0.658,0) -= (0.658,0)
-           (24.052,Q2) += (1.069,0) -= (1.069,0)
-           (0.056,Q3) += (0.018,0) -= (0.018,0)};
-
-      \addplot[style={fill=pink},error bars/.cd, x dir=both, x explicit]
-           coordinates {
-           (15.839,Q1) += (0.558,0) -= (0.558,0)
-           (20.360,Q2) += (0.380,0) -= (0.380,0)
-           (2.294,Q3) += (0.147,0) -= (0.147,0)};
-
-      \addplot[style={fill=green},error bars/.cd, x dir=both, x explicit]
-           coordinates {
-           (22.355,Q1) += (1.201,0) -= (1.201,0)
-           (41.695,Q2) += (2.154,0) -= (2.154,0)
-           (0.106,Q3) += (0.046,0) -= (0.046,0)};
-          
-          
-
 
       \legend{Na\"{i}ve query, With materialized views, With indexes, With materialized views and indexes, With fragmentation, With fragmentation and indexes}
   \end{axis}

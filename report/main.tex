@@ -26,13 +26,12 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-
-\definecolor{EEE2DE}{RGB}{238, 226, 222}
-\definecolor{EA906C}{RGB}{234, 144, 108}
-\definecolor{B31312}{RGB}{179, 19, 18}
-\definecolor{2B2A4C}{RGB}{43, 42, 76}
-
-
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 
 \lstset{language=SQL,
   basicstyle={\ttfamily},
@@ -55,39 +54,41 @@
 }
 \usepackage{titling}
 
-\setlength{\droptitle}{-10em}
+\setlength{\droptitle}{-6em}
 
 \title{
 	\begin{center}
-  		\includegraphics[width=0.125\textwidth]{./images/units-logo.pdf}\\
-  		\smallskip
+  		\includegraphics[width=0.1\textwidth]{./images/units-logo.pdf}\\
+  		%\smallskip
   		\Large {University of Trieste}\\
-		\smallskip
+		%\smallskip
   		\large \textit{Data Management for Big Data} Course\\
-		\smallskip
+		%\smallskip
 		\small Academic Year 2022--2023\\
   		\rule{9cm}{.4pt}\\
-		\medskip
+		%\medskip
   	\end{center}
 	Data Warehouse case study
 }
 
-\author{Davide Capone\thanks{\texttt{\href{mailto:davide.capone@studenti.units.it}{davide.capone@studenti.units.it}}}
-\and Sandro Junior Della Rovere\thanks{\texttt{\href{mailto:sandrojunior.dellarovere@studenti.units.it}{sandrojunior.dellarovere@studenti.units.it}}}
-\and Enrico Stefanel\thanks{\texttt{\href{mailto:enrico.stefanel@studenti.units.it}{enrico.stefanel@studenti.units.it}}}}
+\author{Davide Capone
+\and Sandro Junior Della Rovere
+\and Enrico Stefanel}
 
 
 \DTMsavenow{now}%
 \DTMtozulu{now}{currzulu}
-\date{\footnotesize Last update on \DTMuse{currzulu}}
+\date{}
 %\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\tableofcontents
+\vspace*{-5\baselineskip}
+\blfootnote{Last update on \DTMuse{currzulu}.}
 
+\tableofcontents
 
 \input{content/00_introduction}
 \input{content/01_queries}

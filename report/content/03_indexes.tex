@@ -4,12 +4,14 @@
 
 
 \section{Indexes design}
+\label{sec:indexes}
 
 Indexes may help to further reduce the query execution times. In order to design the indexes, the queries have been executed with the \texttt{EXPLAIN ANALYSE} tool, which helps to detect the most expensive operations that are involved.
 
 It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the most costly, so the indexes were built on the attributes involved in the aforementioned operations and also on the ones involved in \texttt{WHERE} clauses. Only attributes that are used by at least two queries have been considered.
 
 \subsection{Indexes on relations}
+\label{subsec:indexesdef}
 
 \begin{lstlisting}
 CREATE INDEX IF NOT EXISTS lineitem_l_orderkey_idx
