@@ -437,33 +437,23 @@ CREATE INDEX IF NOT EXISTS customer_location_c_name_idx
 ----- no fragmentation, the fragment used by the queries will have 2 columns and the other 1 column only.
 
 ---- CUSTOMER:
-CREATE TABLE IF NOT EXISTS customer_frag_1
-(
-    c_custkey integer NOT NULL,
-    c_name character varying(25) COLLATE pg_catalog."default" NOT NULL,
-    c_nationkey integer NOT NULL,
-    CONSTRAINT customer_frag_1_pkey PRIMARY KEY (c_custkey),
-    CONSTRAINT customer_frag_1_fk1 FOREIGN KEY (c_nationkey)
-        REFERENCES nation (n_nationkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-) AS
 SELECT
 	c_custkey,
 	c_name,
 	c_nationkey
+INTO customer_frag_1
 FROM customer;
 
-CREATE TABLE IF NOT EXISTS customer_frag_2
-(
-	c_custkey integer NOT NULL,
-    c_address character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    c_phone character(15) COLLATE pg_catalog."default" NOT NULL,
-    c_acctbal numeric(15,2) NOT NULL,
-    c_mktsegment character(10) COLLATE pg_catalog."default" NOT NULL,
-    c_comment character varying(117) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT customer_frag_2_pkey PRIMARY KEY (c_custkey)
-) AS
+ALTER TABLE customer_frag_1
+ALTER COLUMN c_custkey SET NOT NULL,
+ALTER COLUMN c_name SET NOT NULL,
+ALTER COLUMN c_nationkey SET NOT NULL,
+ADD	CONSTRAINT customer_frag_1_pkey PRIMARY KEY (c_custkey),
+ADD CONSTRAINT customer_frag_1_fk1 FOREIGN KEY (c_nationkey)
+        REFERENCES nation (n_nationkey) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+
 SELECT
 	c_custkey,
 	c_address,
@@ -471,69 +461,67 @@ SELECT
 	c_acctbal,
 	c_mktsegment,
 	c_comment
+INTO customer_frag_2
 FROM customer;
 
+ALTER TABLE customer_frag_2
+ALTER COLUMN c_custkey SET NOT NULL,
+ALTER COLUMN c_address SET NOT NULL,
+ALTER COLUMN c_phone SET NOT NULL,
+ALTER COLUMN c_acctbal SET NOT NULL,
+ALTER COLUMN c_mktsegment SET NOT NULL,
+ALTER COLUMN c_comment SET NOT NULL,
+ADD	CONSTRAINT customer_frag_2_pkey PRIMARY KEY (c_custkey);
+
 ---- SUPPLIER:
-CREATE TABLE IF NOT EXISTS supplier_frag_1
-(
-    s_suppkey integer NOT NULL,
-    s_name character(25) COLLATE pg_catalog."default" NOT NULL,
-    s_nationkey integer NOT NULL,
-    CONSTRAINT supplier_frag_1_pkey PRIMARY KEY (s_suppkey),
-    CONSTRAINT supplier_frag_1_fk1 FOREIGN KEY (s_nationkey)
-        REFERENCES nation (n_nationkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-) AS
 SELECT
 	s_suppkey,
 	s_name,
 	s_nationkey
+INTO supplier_frag_1
 FROM supplier;
 
-CREATE TABLE IF NOT EXISTS supplier_frag_2
-(
-    s_suppkey integer NOT NULL,
-    s_address character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    s_phone character(15) COLLATE pg_catalog."default" NOT NULL,
-    s_acctbal numeric(15,2) NOT NULL,
-    s_comment character varying(101) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT supplier_frag_2_pkey PRIMARY KEY (s_suppkey)
-) AS
+ALTER TABLE supplier_frag_1
+ALTER COLUMN s_suppkey SET NOT NULL,
+ALTER COLUMN s_name SET NOT NULL,
+ALTER COLUMN s_nationkey SET NOT NULL,
+ADD	CONSTRAINT supplier_frag_1_pkey PRIMARY KEY (s_suppkey),
+ADD CONSTRAINT supplier_frag_1_fk1 FOREIGN KEY (s_nationkey)
+		REFERENCES nation (n_nationkey) MATCH SIMPLE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION;
+
 SELECT
 	s_suppkey,
 	s_address,
 	s_phone,
 	s_acctbal,
 	s_comment
+INTO supplier_frag_2
 FROM supplier;
+
+ALTER TABLE supplier_frag_2
+ALTER COLUMN s_suppkey SET NOT NULL,
+ALTER COLUMN s_address SET NOT NULL,
+ALTER COLUMN s_phone SET NOT NULL,
+ALTER COLUMN s_acctbal SET NOT NULL,
+ALTER COLUMN s_comment SET NOT NULL,
+ADD	CONSTRAINT supplier_frag_2_pkey PRIMARY KEY (s_suppkey);
 
 ---- PARTSUPP: no fragmentation (table not used in queries)
 
 ---- PART:
-CREATE TABLE IF NOT EXISTS part_frag_1
-(
-    p_partkey integer NOT NULL,
-    p_type character varying(25) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT part_frag_1_pkey PRIMARY KEY (p_partkey)
-) AS
 SELECT
 	p_partkey,
 	p_type
+INTO part_frag_1
 FROM part;
 
-CREATE TABLE IF NOT EXISTS part_frag_2
-(
-    p_partkey integer NOT NULL,
-    p_name character varying(55) COLLATE pg_catalog."default" NOT NULL,
-    p_mfgr character(25) COLLATE pg_catalog."default" NOT NULL,
-    p_brand character(10) COLLATE pg_catalog."default" NOT NULL,
-    p_size integer NOT NULL,
-    p_container character(10) COLLATE pg_catalog."default" NOT NULL,
-    p_retailprice numeric(15,2) NOT NULL,
-    p_comment character varying(23) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT part_frag_2_pkey PRIMARY KEY (p_partkey)
-) AS
+ALTER TABLE part_frag_1
+ALTER COLUMN p_partkey SET NOT NULL,
+ALTER COLUMN p_type SET NOT NULL,
+ADD	CONSTRAINT part_frag_1_pkey PRIMARY KEY (p_partkey);
+
 SELECT 
 	p_partkey,
 	p_name,
@@ -543,37 +531,38 @@ SELECT
 	p_container,
 	p_retailprice,
 	p_comment
+INTO part_frag_2
 FROM part;
 
+ALTER TABLE part_frag_2
+ALTER COLUMN p_partkey SET NOT NULL,
+ALTER COLUMN p_name SET NOT NULL,
+ALTER COLUMN p_mfgr SET NOT NULL,
+ALTER COLUMN p_brand SET NOT NULL,
+ALTER COLUMN p_size SET NOT NULL,
+ALTER COLUMN p_container SET NOT NULL,
+ALTER COLUMN p_retailprice SET NOT NULL,
+ALTER COLUMN p_comment SET NOT NULL,
+ADD	CONSTRAINT part_frag_2_pkey PRIMARY KEY (p_partkey);
+
 ---- ORDERS:
-CREATE TABLE IF NOT EXISTS orders_frag_1
-(
-    o_orderkey integer NOT NULL,
-    o_custkey integer NOT NULL,
-    o_orderdate date NOT NULL,
-    CONSTRAINT orders_frag_1_pkey PRIMARY KEY (o_orderkey),
-    CONSTRAINT orders_frag_1_fk1 FOREIGN KEY (o_custkey)
-        REFERENCES customer (c_custkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-) AS
 SELECT
 	o_orderkey,
 	o_custkey,
 	o_orderdate
+INTO orders_frag_1
 FROM orders;
 
-CREATE TABLE IF NOT EXISTS orders_frag_2
-(
-    o_orderkey integer NOT NULL,
-    o_orderstatus character(1) COLLATE pg_catalog."default" NOT NULL,
-    o_totalprice numeric(15,2) NOT NULL,
-    o_orderpriority character(15) COLLATE pg_catalog."default" NOT NULL,
-    o_clerk character(15) COLLATE pg_catalog."default" NOT NULL,
-    o_shippriority integer NOT NULL,
-    o_comment character varying(79) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT orders_frag_2_pkey PRIMARY KEY (o_orderkey)
-) AS
+ALTER TABLE orders_frag_1
+ALTER COLUMN o_orderkey SET NOT NULL,
+ALTER COLUMN o_custkey SET NOT NULL,
+ALTER COLUMN o_orderdate SET NOT NULL,
+ADD	CONSTRAINT orders_frag_1_pkey PRIMARY KEY (o_orderkey),
+ADD CONSTRAINT orders_frag_1_fk1 FOREIGN KEY (o_custkey)
+		REFERENCES customer (c_custkey) MATCH SIMPLE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION;
+
 SELECT
 	o_orderkey,
 	o_orderstatus,
@@ -582,30 +571,20 @@ SELECT
 	o_clerk,
 	o_shippriority,
 	o_comment
+INTO orders_frag_2
 FROM orders;
 
+ALTER TABLE orders_frag_2
+ALTER COLUMN o_orderkey SET NOT NULL,
+ALTER COLUMN o_orderstatus SET NOT NULL,
+ALTER COLUMN o_totalprice SET NOT NULL,
+ALTER COLUMN o_orderpriority SET NOT NULL,
+ALTER COLUMN o_clerk SET NOT NULL,
+ALTER COLUMN o_shippriority SET NOT NULL,
+ALTER COLUMN o_comment SET NOT NULL,
+ADD	CONSTRAINT orders_frag_2_pkey PRIMARY KEY (o_orderkey);
+
 ---- LINEITEM:
-CREATE TABLE IF NOT EXISTS lineitem_frag_1
-(
-    l_orderkey integer NOT NULL,
-    l_partkey integer NOT NULL,
-    l_suppkey integer NOT NULL,
-    l_linenumber integer NOT NULL,
-    l_extendedprice numeric(15,2) NOT NULL,
-    l_discount numeric(15,2) NOT NULL,
-    l_returnflag character(1) COLLATE pg_catalog."default" NOT NULL,
-    l_commitdate date NOT NULL,
-    l_receiptdate date NOT NULL,
-    CONSTRAINT lineitem_frag_1_pkey PRIMARY KEY (l_orderkey, l_linenumber),
-    CONSTRAINT lineitem_frag_1_fk1 FOREIGN KEY (l_orderkey)
-        REFERENCES orders (o_orderkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT lineitem_frag_1_fk2 FOREIGN KEY (l_partkey, l_suppkey)
-        REFERENCES partsupp (ps_partkey, ps_suppkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-) AS
 SELECT
 	l_orderkey,
 	l_linenumber,
@@ -616,25 +595,29 @@ SELECT
 	l_returnflag,
 	l_commitdate,
 	l_receiptdate
+INTO lineitem_frag_1
 FROM lineitem;
 
-CREATE TABLE IF NOT EXISTS lineitem_frag_2
-(
-    l_orderkey integer NOT NULL,
-    l_linenumber integer NOT NULL,
-    l_quantity numeric(15,2) NOT NULL,
-    l_tax numeric(15,2) NOT NULL,
-    l_linestatus character(1) COLLATE pg_catalog."default" NOT NULL,
-    l_shipdate date NOT NULL,
-    l_shipinstruct character(25) COLLATE pg_catalog."default" NOT NULL,
-    l_shipmode character(10) COLLATE pg_catalog."default" NOT NULL,
-    l_comment character varying(44) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT lineitem_frag_2_pkey PRIMARY KEY (l_orderkey, l_linenumber),
-    CONSTRAINT lineitem_frag_2_fk FOREIGN KEY (l_orderkey)
-        REFERENCES orders (o_orderkey) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-) AS
+ALTER TABLE lineitem_frag_1
+ALTER COLUMN l_orderkey SET NOT NULL,
+ALTER COLUMN l_linenumber SET NOT NULL,
+ALTER COLUMN l_partkey SET NOT NULL,
+ALTER COLUMN l_suppkey SET NOT NULL,
+ALTER COLUMN l_extendedprice SET NOT NULL,
+ALTER COLUMN l_discount SET NOT NULL,
+ALTER COLUMN l_returnflag SET NOT NULL,
+ALTER COLUMN l_commitdate SET NOT NULL,
+ALTER COLUMN l_receiptdate SET NOT NULL,
+ADD	CONSTRAINT lineitem_frag_1_pkey PRIMARY KEY (l_orderkey, l_linenumber),
+ADD CONSTRAINT lineitem_frag_1_fk1 FOREIGN KEY (l_orderkey)
+		REFERENCES orders (o_orderkey) MATCH SIMPLE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION,
+ADD CONSTRAINT lineitem_frag_1_fk2 FOREIGN KEY (l_partkey, l_suppkey)
+		REFERENCES partsupp (ps_partkey, ps_suppkey) MATCH SIMPLE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION;
+
 SELECT
 	l_orderkey,
 	l_linenumber,
@@ -645,7 +628,34 @@ SELECT
 	l_shipinstruct,
 	l_shipmode,
 	l_comment
+INTO lineitem_frag_2
 FROM lineitem;
+
+ALTER TABLE lineSELECT
+	l_orderkey,
+	l_linenumber,
+	l_quantity,
+	l_tax,
+	l_linestatus,
+	l_shipdate,
+	l_shipinstruct,
+	l_shipmode,
+	l_comment
+FROM lineitem;item_frag_2
+ALTER COLUMN l_orderkey SET NOT NULL,
+ALTER COLUMN l_linenumber SET NOT NULL,
+ALTER COLUMN l_quantity SET NOT NULL,
+ALTER COLUMN l_tax SET NOT NULL,
+ALTER COLUMN l_linestatus SET NOT NULL,
+ALTER COLUMN l_shipdate SET NOT NULL,
+ALTER COLUMN l_shipinstruct SET NOT NULL,
+ALTER COLUMN l_shipmode SET NOT NULL,
+ALTER COLUMN l_comment SET NOT NULL,
+ADD	CONSTRAINT lineitem_frag_2_pkey PRIMARY KEY (l_orderkey, l_linenumber),
+ADD CONSTRAINT lineitem_frag_2_fk FOREIGN KEY (l_orderkey)
+		REFERENCES orders (o_orderkey) MATCH SIMPLE
+		ON UPDATE NO ACTION
+		ON DELETE NO ACTION;
 
 ---- WARNING: be sure to have defined all the previous fragments before doing the following steps
 ---- Delete the original tables
@@ -654,6 +664,10 @@ DROP TABLE supplier;
 DROP TABLE part;
 DROP TABLE orders;
 DROP TABLE lineitem;
+---- Delete the materialized views
+DROP MATERIALIZED VIEW customer_location_mv;
+DROP MATERIALIZED VIEW supplier_location_mv;
+DROP MATERIALIZED VIEW lineitem_orders_mv;
 
 ---- Queries on fragments:
 ---- Q1:
