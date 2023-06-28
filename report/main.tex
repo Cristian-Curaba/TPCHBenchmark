@@ -26,11 +26,12 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\newcommand\blfootnote[1]{%
-  \begingroup
-  \renewcommand\thefootnote{}\footnote{#1}%
-  \addtocounter{footnote}{-1}%
-  \endgroup
+\newcommand\extrafootertext[1]{%
+    \bgroup
+    \renewcommand\thefootnote{\fnsymbol{footnote}}%
+    \renewcommand\thempfootnote{\fnsymbol{mpfootnote}}%
+    \footnotetext[0]{#1}%
+    \egroup
 }
 
 \lstset{language=SQL,
@@ -83,12 +84,11 @@
 
 \begin{document}
 
-\maketitle
-
-\vspace*{-5\baselineskip}
-\blfootnote{Last update on \DTMuse{currzulu}.}
-
+\clearpage\maketitle
+\thispagestyle{empty}
+\vspace*{-4.5\baselineskip}
 \tableofcontents
+\extrafootertext{Last update on \DTMuse{currzulu}.}
 
 \input{content/00_introduction}
 \input{content/01_queries}

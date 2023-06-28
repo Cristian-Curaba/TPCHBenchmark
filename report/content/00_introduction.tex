@@ -6,7 +6,9 @@
 \section{Introduction}
 \label{section:introduction}
 
-The aim of this project is to study an efficient implementation of a suite of business oriented ad-hoc queries over the public TPC-H benchmark, which can be considered as a Big Data database, that has been implemented in Postgres. The way in which this efficient implementation is going to be realized is by exploiting \textit{materialized views} and \textit{indexes}. The total weight of the database after the implementation of these solutions is requested to stay below \num{1.5} times the original database weight.
+The aim of this project is to study an efficient implementation of a suite of business oriented ad-hoc queries over the public TPC-H benchmark, which can be considered as a Big Data database. The chosen DMBS for the implementation is \href{https://www.postgresql.org}{PostgreSQL}.
+
+The way in which this efficient implementation is going to be realized is by exploiting \textit{materialized views}, \textit{indexes} and \textit{(vertical) fragmentation}. The total weight of the database after the implementation of these solutions is requested to stay below \num{1.5} times the original database weight.
 
 \subsection{TPC-H benchmark database}
 
