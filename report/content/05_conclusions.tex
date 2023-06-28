@@ -9,9 +9,9 @@
 Considering the overall results shown in \autoref{fig:graph}, the optimal approach for optimising the efficiency of queries 1 (Export/import revenue value) and 2 (Late delivery) might be to use the materialized views proposed in \autoref{section:materialization} but this happens to be the worst-case scenario for query 3 (Returned item loss).
 The opposite situation occurs when using the indexes defined in \autoref{sec:indexes}: the query 3 is optimised, but queries 1 and 2 show roughly the same run times as the na\"{i}ve solution.
 
-Assuming that all the three queries have the same importance (i.e., none of them is being executed a lot more frequently than the others), a good trade-off may seem to use materialized views and indexes (\autoref{subsection:indexes_mv}). This solution, by the way, does not meet the size constraint of the project.
+Assuming that all the three queries have the same importance (i.e., none of them is being executed a lot more frequently than the others), a good trade-off may seem to use \textit{materialized views} and \textit{indexes} (\autoref{subsection:indexes_mv}). This solution, by the way, does not meet the size constraint of the project.
 
-The final solution that is being proposed for the given problem concerns using the (vertical) fragmentation reported in \autoref{sec:fragmentation} without any additional index. Query 1 is executed in \SI{15.84}{\s}, i.e.\ 2.5 times faster than the na\"{i}ve solution; query 2 runs in \SI{20.36}{\s}, i.e.\ it is 2.3 times faster than the related na\"{i}ve solution; query 3 is executed in \SI{2.29}{\s}, i.e.\ 3.5 times faster than the corresponding na\"{i}ve solution.
+The final solution that is being proposed for the given problem concerns using the (\textit{vertical}) \textit{fragmentation} reported in \autoref{sec:fragmentation} without any additional index. Query 1 is executed in \SI{15.84}{\s}, i.e.\ 2.5 times faster than the na\"{i}ve solution; query 2 runs in \SI{20.36}{\s}, i.e.\ it is 2.3 times faster than the related na\"{i}ve solution; query 3 is executed in \SI{2.29}{\s}, i.e.\ 3.5 times faster than the corresponding na\"{i}ve solution.
 
 
 \begin{figure}[h]

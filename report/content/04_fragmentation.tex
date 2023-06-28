@@ -6,9 +6,9 @@
 \section{Fragmentation}
 \label{sec:fragmentation}
 
-To conclude the testings, it has been decided to try vertical fragmentation.
+To conclude the testings, it has been decided to try \textit{vertical fragmentation}.
 
-It makes sense to try such an approach, since queries only use a subset of attributes of the tables. Vertical fragmentation is usually implemented in distributes systems but it can still be useful in this case to reduce the workload induced by the queries.
+It makes sense to try such an approach, since queries only use a subset of attributes of the tables. \textit{Vertical fragmentation} is usually implemented in distributes systems but it can still be useful in this case to reduce the workload induced by the queries.
 
 \begin{lstlisting}
 ---- NATION: 
@@ -265,7 +265,7 @@ Timings have been calculated using the queries defined in \autoref{sec:queries} 
 
 \subsection{Indexes on fragmented tables}
 
-Since the results shown in \autoref{tab:fragmentationtimings} are promising, it has been decided to implement the indexes (the ones defined in \autoref{subsec:indexesdef}) on the corresponding fragments.
+Since the results shown in \autoref{tab:fragmentationtimings} are promising, it has been decided to implement the \textit{indexes} (the ones defined in \autoref{subsec:indexesdef}) on the corresponding fragments.
 
 The total size of the data warehouse at this point is \SI{20}{\giga\byte} (again, the size constraint defined in \autoref{section:introduction} is respected).
 
