@@ -6,13 +6,13 @@
 \section{Introduction}
 \label{section:introduction}
 
-The aim of this project is to study an efficient implementation of a suite of business oriented ad-hoc queries over the public TPC-H benchmark, which can be considered as a Big Data database. The chosen DMBS for the implementation is \href{https://www.postgresql.org}{PostgreSQL}.
+The aim of this project is to study an efficient implementation of a suite of business oriented ad-hoc queries over the public TPC-H benchmark, which can be considered as a Big Data datawarehouse. The chosen DMBS for the implementation is \href{https://www.postgresql.org}{PostgreSQL}.
 
 The way in which this efficient implementation is going to be realized is by exploiting \textit{materialized views}, \textit{indexes} and \textit{(vertical) fragmentation}. The total weight of the database after the implementation of these solutions is requested to stay below \num{1.5} times the original database weight.
 
 \subsection{TPC-H benchmark database}
 
-The TPC-H benchmark is a decision support benchmark that can be downloaded from the \href{https://www.tpc.org/tpch/}{TPC official website}. The data generator lets the user specify a \textit{scale factor} in order to control the size of the resulted database. Our choices was to use a \textit{scale factor} of \num{10}, meaning that the overall database size is approximately \SI{13}{\giga\byte}. The sizes of the individual tables that compose the database are also shown below.
+The TPC-H benchmark is a decision support benchmark that can be downloaded from the \href{https://www.tpc.org/tpch/}{TPC official website}. The data generator lets the user specify a \textit{scale factor} in order to control the size of the resulting database. Our choices was to use a \textit{scale factor} of \num{10}, meaning that the overall database size is approximately \SI{14}{\giga\byte}. The sizes of the individual tables that compose the database are also shown below.
 
 \subsubsection{Database statistics}
 
@@ -28,11 +28,11 @@ The benchmark is composed by eight tables:
 			\item \texttt{l\_receiptdate} (\num{2555} distinct values, i.e.\ there is an average of \num{23478} tuples with the same value, that range from {1992-01-03} to {1998-12-31});
 		\end{itemize}
 	\item \texttt{NATION}, with \num{8} columns and \num{25} tuples (\SI{24}{\kilo\byte});
-	\item \texttt{ORDERS}, with \num{18} columns and \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attributes that are going to be used are:
+	\item \texttt{ORDERS}, with \num{18} columns and \num{1500000} tuples (\SI{2481}{\kilo\byte}); the main attribute that is going to be used is:
 		\begin{itemize}
 			\item \texttt{o\_orderdate} (\num{2406} distinct values, i.e.\ there is an average of \num{6234} tuples with the same value, that range from {1992-01-01} to {1998-08-02});
 		\end{itemize}
-	\item \texttt{PART}, with \num{18} columns and \num{2000000} tuples (\SI{363}{\mega\byte}); the main attributes that are going to be used are:
+	\item \texttt{PART}, with \num{18} columns and \num{2000000} tuples (\SI{363}{\mega\byte}); the main attribute that is going to be used is:
 		\begin{itemize}
 			\item \texttt{p\_type} (\num{150} distinct values, i.e.\ there is an average of \num{13333} tuples with the same value);
 		\end{itemize}
@@ -45,12 +45,13 @@ Other attributes have been used, but statistics about them have been omitted for
 
 \subsubsection{Database SQL definition}
 
-The SQL definition of the tables can be found on the official benchmark download.
+The SQL definition of the tables can be found on the official benchmark documentation. \cite{TPC-H}
 
 \subsection{Organization of work}
 \label{subsection:organizationwork}
 
-Each of the group component implemented a query (specifically, Della Rovere designed the first query, Capone the second one, and Stefanel the last one).
-After regular meetings between the group members comparing the solo works, common substructures between queries have been detected, and the work that followed proceeded in a coral way.
+Each component of the group implemented a query (specifically, Della Rovere designed the first query, Capone the second one, and Stefanel the last one).
+After regular meetings between the group members comparing the solo works, common substructures between the queries have been detected, and the following work proceeded in a coral way.
 
 All the execution times reported in the present report are the results of independent runs on the same machine, with roughly the same external factors. In particular, a computer with an Apple M1 processor, \SI{8}{\giga\byte} of RAM, and macOS operating system has been used.
+Furthermore, no consecutive runs have been performed on the same query, in order to reduce external biases (following a Round-Robin schema).

@@ -9,7 +9,8 @@
 \subsection{Export/import revenue value}
 
 It is asked to return the \textit{export/import revenue} between two different nations (E, I) where E is the nation of the lineitem supplier 
-and I the nation of the lineitem customer, and where the \textit{revenue} is defined as $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$.
+and I the nation of the lineitem customer, and where the \textit{revenue} is defined as $$ \texttt{SUM(l\_extendedprice*(1-l\_discount))}$$
+
 The aggregation should be performed with the Month $\rightarrow$ Quarter $\rightarrow$ Year, (Part) Type and Nation $\rightarrow$ Region roll-ups.
 
 The query is implemented in such a way that it allows the slicing over (Part) Type and Exporting Nation.
@@ -192,7 +193,6 @@ SELECT * FROM query3;
 \subsection{Execution times}
 
 The query timings have been measured as previously discussed in \autoref{subsection:organizationwork}.
-Furthermore, no consecutive runs have been performed on the same query, in order to reduce external biases (following a Round-Robin schema).
 
 \begin{table}[!h]
 \centering

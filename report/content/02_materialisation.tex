@@ -6,12 +6,12 @@
 \section{Materialization}
 \label{section:materialization}
 
-After a study on the given set of queries, some common intermediate results have been detected between the three. In order to try lowering the average execution cost, materialized views have been defined starting from the said results.
+After a study on the given set of queries, some common intermediate results have been detected between the three, and they have been chosen as candidate views. In order to try lowering the average execution cost, materialized views have been defined starting from the said results.
 
 Furthermore, since the problem considers dealing with a data warehouse (OLAP), there would not be frequent updates, so materialized views are a smart choice.
 
 \subsection{Lineitem - Orders View}
-Since all the queries perform a join between relations \textit{lineitem} and \textit{orders}, an idea is to pre-process this join by creating a materialized view.
+Since all the queries perform a join between relations \textit{lineitem} and \textit{orders}, an idea is to pre-process this join by creating a primary view.
 
 \begin{lstlisting}
 CREATE MATERIALIZED VIEW lineitem_orders_mv AS
@@ -32,7 +32,7 @@ CREATE MATERIALIZED VIEW lineitem_orders_mv AS
 This materialized view is composed by \num{59986052} rows, and weighs \SI{4378}{\mega\byte}.
 
 \subsection{Customer - Location View}
-Queries 1 and 2 execute a join operation between \textit{customer}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
+Queries 1 and 2 execute a join operation between \textit{customer}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a primary view.
 
 \begin{lstlisting}
 CREATE MATERIALIZED VIEW customer_location_mv AS
@@ -51,7 +51,7 @@ CREATE MATERIALIZED VIEW customer_location_mv AS
 This materialized view is composed by \num{1500000} rows, and weighs \SI{167}{\mega\byte}.
 
 \subsection{Supplier - Location View}
-Finally, queries 1 and 2 execute a join operation between \textit{supplier}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating a materialized view.
+Finally, queries 1 and 2 execute a join operation between \textit{supplier}, \textit{nation} and \textit{region}, also this step has been pre-processed by creating another primary view.
 
 \begin{lstlisting}
 CREATE MATERIALIZED VIEW supplier_location_mv AS
@@ -173,7 +173,7 @@ The total weight of the database with the materialized views is \SI{19}{\giga\by
 
 \subsection{Execution times}
 
-As for the base versions of queries, we collected statistics on execution timings and results can be observed on \autoref{tab:materializationstimings}. Further considerations are reported in the \autoref{section:conclusions}.
+As for the queries with materialized views, we collected statistics on execution timings and results can be observed on \autoref{tab:materializationstimings}. Further considerations are reported in the \autoref{section:conclusions}.
 
 \begin{table}[!h]
 \centering

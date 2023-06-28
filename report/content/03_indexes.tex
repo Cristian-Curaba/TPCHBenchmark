@@ -8,7 +8,7 @@
 
 Indexes may help to further reduce the queries execution times. In order to design the indexes, the queries have been executed with the \texttt{EXPLAIN ANALYSE} tool, which helps to detect the most expensive operations that are involved.
 
-It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the most costly, so the indexes were built on the attributes involved in the aforementioned operations and also on the ones involved in \texttt{WHERE} clauses. Only attributes that are used by at least two queries have been considered.
+It turns out that the \texttt{JOIN} and \texttt{GROUP BY} operations are the most costly, so the indexes were built on the dimensions involved in the aforementioned operations and also on the ones involved in \texttt{WHERE} clauses. Only attributes that are used by at least two queries have been considered.
 
 \subsection{Indexes on relations}
 \label{subsec:indexesdef}
@@ -70,7 +70,7 @@ CREATE INDEX IF NOT EXISTS customer_c_name_idx
 	TABLESPACE pg_default;
 \end{lstlisting}
 
-The total weight of the database at this point is \SI{21}{\giga\byte}, in this way the bound given in \autoref{section:introduction} is satisfied for the mandatory part of the project. What follows (i.e., indexes on materialized views) concerns optimizations that have been defined as \textit{optional} in the project statement, and so it is not guaranteed that the limit remains fulfilled.
+The total weight of the database with the indexes (without the materialized views) is \SI{16}{\giga\byte}, in this way the bound given in \autoref{section:introduction} is satisfied for the mandatory part of the project. What follows (i.e., indexes on materialized views) concerns optimizations that have been defined as \textit{optional} in the project statement, and so it is not guaranteed that the limit remains fulfilled.
 
 \subsubsection{Execution times}
 
