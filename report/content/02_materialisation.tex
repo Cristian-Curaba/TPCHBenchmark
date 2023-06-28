@@ -72,6 +72,8 @@ This materialized view is composed by \num{100000} rows, and weighs \SI{12}{\meg
 \subsection{Queries with materialized views}
 \label{subsection:queriesmaterilizedviews}
 
+The original queries have been re-written, in order to use materialized views instead of using JOIN operations on the related tables.
+
 \begin{lstlisting}
 WITH query1 AS (
 	SELECT
@@ -166,7 +168,7 @@ GROUP BY
 SELECT * FROM query3;
 \end{lstlisting}
 
-The total weight of the database with the materialized views is \SI{19}{\giga\byte}.
+The total weight of the database with the materialized views is \SI{19}{\giga\byte} (the constraint on the data warehouse size is respected).
 
 
 \subsection{Execution times}

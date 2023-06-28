@@ -34,7 +34,8 @@ SELECT
 	c_name,
 	c_nationkey
 FROM customer;
-
+\end{lstlisting}
+\begin{lstlisting}
 CREATE TABLE IF NOT EXISTS customer_frag_2
 (
 	c_custkey integer NOT NULL,
@@ -53,7 +54,8 @@ SELECT
 	c_mktsegment,
 	c_comment
 FROM customer;
-
+\end{lstlisting}
+\begin{lstlisting}
 ---- SUPPLIER:
 CREATE TABLE IF NOT EXISTS supplier_frag_1
 (
@@ -71,7 +73,8 @@ SELECT
 	s_name,
 	s_nationkey
 FROM supplier;
-
+\end{lstlisting}
+\begin{lstlisting}
 CREATE TABLE IF NOT EXISTS supplier_frag_2
 (
     s_suppkey integer NOT NULL,
@@ -90,7 +93,8 @@ SELECT
 FROM supplier;
 
 ---- PARTSUPP: no fragmentation (table not used in queries)
-
+\end{lstlisting}
+\begin{lstlisting}
 ---- PART:
 CREATE TABLE IF NOT EXISTS part_frag_1
 (
@@ -102,7 +106,8 @@ SELECT
 	p_partkey,
 	p_type
 FROM part;
-
+\end{lstlisting}
+\begin{lstlisting}
 CREATE TABLE IF NOT EXISTS part_frag_2
 (
     p_partkey integer NOT NULL,
@@ -125,7 +130,8 @@ SELECT
 	p_retailprice,
 	p_comment
 FROM part;
-
+\end{lstlisting}
+\begin{lstlisting}
 ---- ORDERS:
 CREATE TABLE IF NOT EXISTS orders_frag_1
 (
@@ -143,7 +149,8 @@ SELECT
 	o_custkey,
 	o_orderdate
 FROM orders;
-
+\end{lstlisting}
+\begin{lstlisting}
 CREATE TABLE IF NOT EXISTS orders_frag_2
 (
     o_orderkey integer NOT NULL,
@@ -164,7 +171,8 @@ SELECT
 	o_shippriority,
 	o_comment
 FROM orders;
-
+\end{lstlisting}
+\begin{lstlisting}
 ---- LINEITEM:
 CREATE TABLE IF NOT EXISTS lineitem_frag_1
 (
@@ -198,7 +206,8 @@ SELECT
 	l_commitdate,
 	l_receiptdate
 FROM lineitem;
-
+\end{lstlisting}
+\begin{lstlisting}
 CREATE TABLE IF NOT EXISTS lineitem_frag_2
 (
     l_orderkey integer NOT NULL,
@@ -229,7 +238,7 @@ SELECT
 FROM lineitem;
 \end{lstlisting}
 
-The weight of the data warehouse with fragmented tables is roughly the same as the original one.
+The weight of the data warehouse with fragmented tables is roughly the same as the original one, since no additional data structures have been defined and the only action performed is a physical \textit{split} of relations.
 
 \subsubsection{Execution times}
 
@@ -258,7 +267,7 @@ Timings have been calculated using the queries defined in \autoref{sec:queries} 
 
 Since the results shown in \autoref{tab:fragmentationtimings} are promising, it has been decided to implement the indexes (the ones defined in \autoref{subsec:indexesdef}) on the corresponding fragments.
 
-The total size of the data warehouse at this point is \SI{20}{\giga\byte}.
+The total size of the data warehouse at this point is \SI{20}{\giga\byte} (again, the size constraint defined in \autoref{section:introduction} is respected).
 
 
 \subsubsection{Execution times}
